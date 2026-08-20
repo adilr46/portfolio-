@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Palate AI — Adil Rasheed</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/modernist-13ec4272-7ce8-4ae4-9e5b-5b6bf80f3f12/styles.css">
+<script src="_ds/modernist-13ec4272-7ce8-4ae4-9e5b-5b6bf80f3f12/_ds_bundle.js"></script>
+<style>
+a{text-decoration:none}
+@keyframes pwFade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.pw-mobile-img{display:none}
+.pw-grid{display:grid;grid-template-columns:minmax(0,42fr) minmax(0,40fr);gap:64px}
+@media (max-width:880px){
+  .pw-sticky-col{display:none}
+  .pw-mobile-img{display:block}
+  .pw-grid{grid-template-columns:1fr;gap:0}
+  .pw-stage{min-height:0 !important;padding:56px 0 !important}
+}
+.pw-toggle-wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.pw-toggle-btns{display:flex}
+@media (max-width:600px){
+  .pw-toggle-wrap{flex-direction:column;align-items:flex-start}
+  .pw-toggle-btns{width:100%}
+  .pw-toggle-btns button{flex:1}
+}
+.pf-cursor-dot{position:fixed;top:0;left:0;width:9px;height:9px;border-radius:50%;background:var(--color-accent-700);pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width 0.15s ease,height 0.15s ease,opacity 0.15s ease;opacity:0.55}
+.pf-cursor-dot.pf-cursor-hover{width:15px;height:15px;opacity:0.85}
+.pf-cursor-dot.pf-cursor-strong{width:26px;height:26px;opacity:0.95}
+@media (hover:none),(pointer:coarse){.pf-cursor-dot{display:none}}
+.pf-cursor-trail{position:fixed;inset:0;pointer-events:none;z-index:9998}
+@media (hover:none),(pointer:coarse){.pf-cursor-trail{display:none}}
+</style>
+<script>
+(function(){
+  function init(){
+    var dot=document.createElement('div');
+    dot.className='pf-cursor-dot';
+    document.body.appendChild(dot);
+    document.addEventListener('mousemove',function(e){dot.style.left=e.clientX+'px';dot.style.top=e.clientY+'px';});
+    document.addEventListener('mouseover',function(e){
+      var strong=e.target.closest('a,button,.btn');
+      var soft=strong||e.target.closest('[role="button"],.tag,input,select,textarea');
+      dot.classList.toggle('pf-cursor-strong',!!strong);
+      dot.classList.toggle('pf-cursor-hover',!!soft&&!strong);
+    });
+    document.addEventListener('mouseout',function(e){
+      if(e.target.closest('a,button,.btn,[role="button"],.tag,input,select,textarea')){
+        dot.classList.remove('pf-cursor-hover');
+        dot.classList.remove('pf-cursor-strong');
+      }
+    });
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches||window.matchMedia('(hover: none), (pointer: coarse)').matches)return;
+    var canvas=document.createElement('canvas');
+    canvas.className='pf-cursor-trail';
+    document.body.appendChild(canvas);
+    var ctx=canvas.getContext('2d');
+    function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+    resize();
+    window.addEventListener('resize',resize);
+    var accent=getComputedStyle(document.documentElement).getPropertyValue('--color-accent-700').trim()||'#8a1f11';
+    var mx=null,my=null,tx=null,ty=null;
+    var tmr=null;
+    document.addEventListener('mousemove',function(e){
+      tx=e.clientX;ty=e.clientY;if(mx===null){mx=tx;my=ty;}
+      if(tmr)clearTimeout(tmr);
+      tmr=setTimeout(function(){ctx.clearRect(0,0,canvas.width,canvas.height);tx=null;mx=null;},220);
+    });
+    function frame(){
+      if(tx!==null){
+        var dx=tx-mx,dy=ty-my;
+        var dist=Math.sqrt(dx*dx+dy*dy);
+        mx+=dx*0.3;my+=dy*0.3;
+        ctx.globalCompositeOperation='destination-out';
+        ctx.fillStyle='rgba(0,0,0,0.26)';
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+        ctx.globalCompositeOperation='source-over';
+        ctx.strokeStyle=accent;
+        ctx.globalAlpha=Math.min(0.32,0.16+dist*0.006);
+        ctx.lineWidth=Math.min(3.5,1.4+dist*0.06);
+        ctx.lineCap='round';
+        ctx.beginPath();
+        ctx.moveTo(mx-dx*0.3,my-dy*0.3);
+        ctx.lineTo(mx,my);
+        ctx.stroke();
+        ctx.globalAlpha=1;
+      }
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init);}else{init();}
+})();
+</script>
+</helmet>
+
+<div style="font-family:var(--font-body);background:var(--color-bg);color:var(--color-text);min-height:100vh">
+
+  <div class="pw-nav" style="position:sticky;top:0;z-index:30;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;padding:14px clamp(20px,5vw,72px);border-bottom:2px solid var(--color-divider);background:var(--color-bg);gap:16px;flex-wrap:wrap;min-height:56px">
+    <a href="index.html" style="font-family:var(--font-heading);font-weight:700;font-size:14px;color:var(--color-accent-700);text-decoration:none" style-hover="color:var(--color-accent)">← Portfolio</a>
+    <div class="pw-toggle-btns" style="border:1px solid var(--color-text)">
+      <button style="{{ productBtnStyle }}" onClick="{{ showProductView }}">Product walkthrough</button>
+      <button style="{{ videoBtnStyle }}" onClick="{{ showVideoViewFn }}">Video walkthrough</button>
+    </div>
+  </div>
+
+  <sc-if value="{{ showProduct }}" hint-placeholder-val="{{ true }}">
+  <div style="max-width:1200px;margin:0 auto;padding:0 clamp(20px,5vw,72px)">
+
+    <section style="padding:120px 0 96px;max-width:760px">
+      <span style="display:block;font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:18px">Palate AI</span>
+      <h1 style="font-family:var(--font-heading);font-weight:var(--font-heading-weight);font-size:clamp(36px,5.2vw,60px);line-height:1.08;letter-spacing:-0.02em;margin:0 0 24px">Nutrition that quietly runs in the background.</h1>
+      <p style="font-size:18px;line-height:1.6;color:color-mix(in srgb, var(--color-text) 78%, transparent);margin:0;max-width:60ch">Palate turns goals into plans, groceries, meals and feedback, automating the repetitive decisions behind eating well so staying healthy feels less like a daily task.</p>
+    </section>
+
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ showProduct }}" hint-placeholder-val="{{ true }}">
+  <div style="max-width:1200px;margin:0 auto;padding:0 clamp(20px,5vw,72px)">
+    <div class="pw-grid" style="padding:64px 0 0">
+
+      <div class="pw-sticky-col" style="position:sticky;top:96px;align-self:start;height:fit-content;max-height:calc(100vh - 140px);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 0">
+        <div style="{{ visualContainerStyle }}">
+          <img src="{{ backStage.img }}" alt="" style="{{ backImgStyle }}">
+          <img key="{{ frontStage.id }}" src="{{ frontStage.img }}" alt="{{ frontStage.headline }}" style="{{ frontImgStyle }}">
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:20px">
+          <sc-for list="{{ dots }}" as="dot" hint-placeholder-count="9">
+            <span style="{{ dot.style }}"></span>
+          </sc-for>
+          <span style="font-size:12px;font-weight:600;letter-spacing:0.06em;color:color-mix(in srgb, var(--color-text) 50%, transparent)">{{ stageCounter }}</span>
+        </div>
+      </div>
+
+      <div>
+        <sc-for list="{{ stages }}" as="stage" hint-placeholder-count="9">
+          <div ref="{{ stage.setRef }}" class="pw-stage" style="{{ stage.wrapStyle }}">
+            <img class="pw-mobile-img" src="{{ stage.img }}" alt="{{ stage.headline }}" style="width:100%;max-width:280px;height:auto;margin:0 0 32px;border:2px solid #111;box-shadow:var(--shadow-md)">
+
+            <sc-if value="{{ stage.eyebrow }}" hint-placeholder-val="{{ true }}">
+              <span style="{{ stage.eyebrowStyle }}">{{ stage.eyebrow }}</span>
+            </sc-if>
+
+            <h2 style="{{ stage.headlineStyle }}">{{ stage.headline }}</h2>
+
+            <sc-for list="{{ stage.body }}" as="para" hint-placeholder-count="2">
+              <p style="{{ stage.bodyStyle }}">{{ para }}</p>
+            </sc-for>
+
+            <sc-if value="{{ stage.punch }}" hint-placeholder-val="{{ false }}">
+              <p style="{{ stage.punchStyle }}">{{ stage.punch }}</p>
+            </sc-if>
+
+            <sc-for list="{{ stage.body2 }}" as="para2" hint-placeholder-count="2">
+              <p style="{{ stage.bodyStyle }}">{{ para2 }}</p>
+            </sc-for>
+
+            <sc-if value="{{ stage.closingLine }}" hint-placeholder-val="{{ false }}">
+              <p style="{{ stage.closingLineStyle }}">{{ stage.closingLine }}</p>
+            </sc-if>
+
+            <div style="{{ stage.calloutsWrapStyle }}">
+              <sc-for list="{{ stage.callouts }}" as="callout" hint-placeholder-count="3">
+                <span class="tag tag-neutral" style="border:1px solid var(--color-divider);white-space:nowrap;height:auto">{{ callout }}</span>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ showVideo }}" hint-placeholder-val="{{ false }}">
+  <div style="max-width:1200px;margin:0 auto;padding:88px clamp(20px,5vw,72px) 0;animation:pwFade 0.4s ease">
+    <span style="display:block;font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:18px">End-to-end experience</span>
+    <h2 style="font-family:var(--font-heading);font-weight:var(--font-heading-weight);font-size:clamp(30px,4vw,46px);line-height:1.15;letter-spacing:-0.015em;margin:0 0 20px;max-width:22ch">See how Palate moves from intention to execution.</h2>
+    <p style="font-size:16px;line-height:1.65;color:color-mix(in srgb, var(--color-text) 78%, transparent);margin:0;max-width:60ch">The product walkthrough explains the system. This view shows how those parts behave together, moving from planning, to shopping, cooking, logging and feedback without breaking the user's flow.</p>
+  </div>
+
+  <div style="width:min(360px, calc((100vh - 200px) * 760 / 1306));margin:56px auto 0">
+    <div style="position:relative;border:1px solid var(--color-divider);box-shadow:var(--shadow-lg);background:#111;overflow:hidden">
+      <video ref="{{ setVideoRef }}" src="{{ videoSrc }}" controls="{{ true }}" loop="{{ true }}" playsinline="" onTimeUpdate="{{ onTimeUpdate }}" onPlay="{{ onPlay }}" style="width:100%;height:auto;display:block;background:#000"></video>
+      <sc-if value="{{ showPlayOverlay }}" hint-placeholder-val="{{ true }}">
+        <div onClick="{{ onPlayClick }}" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:rgba(17,17,17,0.55);cursor:pointer">
+          <div style="width:64px;height:64px;border:2px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"></path></svg>
+          </div>
+          <span style="font-family:var(--font-heading);font-weight:var(--font-heading-weight);font-size:15px;color:#fff;letter-spacing:-0.01em">Watch full flow</span>
+          <span style="font-size:12px;font-weight:600;letter-spacing:0.06em;color:rgba(255,255,255,0.7)">53 SEC</span>
+        </div>
+      </sc-if>
+    </div>
+
+    <div style="display:flex;align-items:center;justify-content:center;gap:0;margin-top:20px;flex-wrap:wrap">
+      <sc-for list="{{ chapters }}" as="ch" hint-placeholder-count="5">
+        <span style="{{ ch.style }}" style-after="{{ ch.afterStyle }}">{{ ch.label }}</span>
+      </sc-for>
+    </div>
+
+  </div>
+
+  <div style="max-width:1200px;margin:64px auto 0;padding:0 clamp(20px,5vw,72px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:56px;align-items:start">
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px">
+      <sc-for list="{{ sequenceSteps }}" as="s" hint-placeholder-count="5">
+        <span class="tag tag-neutral" style="border:1px solid var(--color-divider);white-space:nowrap;height:auto">{{ s }}</span>
+      </sc-for>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:28px">
+      <sc-for list="{{ observations }}" as="ob" hint-placeholder-count="3">
+        <div>
+          <span style="display:block;font-size:12px;font-weight:600;letter-spacing:0.06em;color:color-mix(in srgb, var(--color-text) 50%, transparent);margin-bottom:8px">{{ ob.num }}</span>
+          <p style="font-family:var(--font-heading);font-weight:var(--font-heading-weight);font-size:17px;letter-spacing:-0.01em;margin:0 0 6px">{{ ob.title }}</p>
+          <p style="font-size:14px;line-height:1.6;color:color-mix(in srgb, var(--color-text) 68%, transparent);margin:0;max-width:52ch">{{ ob.body }}</p>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ showProduct }}" hint-placeholder-val="{{ true }}">
+  <hr class="hr" style="margin:96px 0 0">
+
+  <div style="max-width:1200px;margin:0 auto;padding:96px clamp(20px,5vw,72px) 0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px;align-items:center">
+    <div style="display:flex;flex-direction:column;align-items:flex-start;gap:0">
+      <sc-for list="{{ systemSteps }}" as="step" hint-placeholder-count="7">
+        <div>
+          <div style="{{ step.pillStyle }}">{{ step.label }}</div>
+          <sc-if value="{{ step.showArrow }}" hint-placeholder-val="{{ true }}">
+            <span style="font-size:18px;color:color-mix(in srgb, var(--color-text) 40%, transparent);margin:6px 0 6px 22px;display:block">↓</span>
+          </sc-if>
+        </div>
+      </sc-for>
+      <span style="font-size:13px;font-weight:600;color:var(--color-accent-700);margin:10px 0 0 22px">↺ back to Plan</span>
+    </div>
+    <div>
+      <h2 style="font-family:var(--font-heading);font-weight:var(--font-heading-weight);font-size:clamp(30px,4vw,46px);line-height:1.15;letter-spacing:-0.015em;margin:0 0 24px">Palate turns nutrition from something you track into something you can execute.</h2>
+      <p style="font-size:16px;line-height:1.65;color:color-mix(in srgb, var(--color-text) 78%, transparent);margin:0;max-width:52ch">The intended outcome is not simply better calorie visibility. It is reducing the repeated cognitive work involved in deciding what to eat, buying the right food and following through consistently.</p>
+    </div>
+  </div>
+  </sc-if>
+
+  <div style="max-width:1200px;margin:0 auto;padding:80px clamp(20px,5vw,72px) 40px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
+    <a href="index.html" class="btn btn-ghost">← Back to projects</a>
+    <a href="Hunter.dc.html" style="font-family:var(--font-heading);font-weight:600;font-size:13px;color:var(--color-text);text-decoration:none;align-self:center">Next project →</a>
+  </div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  STAGES = [
+    { id: 'plan', eyebrow: '01 / PLAN', headline: 'Know what to eat before the day begins.',
+      body: [
+        'Palate turns nutritional goals into an actual eating plan rather than leaving the user with an empty calorie diary.',
+        'Calories and macros become constraints around concrete meals, so the first question the product answers is not "what did you eat?" but:',
+      ],
+      punch: '"What should I eat today?"',
+      callouts: ['Daily calorie + macro targets', 'AI-generated meal structure', 'Contextual nutrition insight'],
+      img: 'Screenshot 2026-06-18 231557.png' },
+    { id: 'flex', eyebrow: '02 / FLEX', headline: 'Planning without making the plan rigid.',
+      body: [
+        'Real life does not always follow a weekly schedule.',
+        'Quick Meal lets the user describe what they actually want in the moment: meal type, ingredients on hand, preparation time, while still using Palate as the decision layer.',
+      ],
+      punch: 'Planned when useful, flexible when necessary.',
+      callouts: ['Natural-language meal requests', 'Time-aware suggestions', 'Ingredients already on hand'],
+      img: 'Screenshot 2026-06-18 231608.png' },
+    { id: 'shop', eyebrow: '03 / SHOP', headline: 'Turn the meal plan into the shop required to execute it.',
+      body: [
+        'Meal planning often creates another task: manually converting recipes into ingredients, then into supermarket products.',
+        'Palate removes that handoff. The weekly plan becomes a grocery basket matched to real supermarket products, with an estimated weekly cost and the ability to swap individual items.',
+      ],
+      callouts: ['Weekly cost before checkout', 'Matched supermarket products', 'Swap without rebuilding the plan'],
+      img: 'Screenshot 2026-06-18 231729.png' },
+    { id: 'cook', eyebrow: '04 / COOK', headline: 'Move from ingredients to something you can actually make.',
+      body: [
+        'Buying the correct food still leaves another execution gap: preparing it.',
+        'Palate connects the weekly plan directly to recipes, so meals remain swappable and rateable without collapsing back into endless browsing.',
+      ],
+      callouts: ['Recipes tied to the weekly plan', 'Swap individual meals', 'Rate what actually worked'],
+      img: 'Screenshot 2026-06-18 231822.png' },
+    { id: 'execute', eyebrow: '05 / EXECUTE', headline: 'The plan becomes today\u2019s board.',
+      body: [
+        'Instead of asking the user to reconstruct their day inside a tracker, Palate keeps planned meals ready to act on.',
+        'The user can see what comes next, prepare it and log it directly from the same workflow.',
+      ],
+      callouts: ['Today\u2019s planned meals', 'Nutrition visible before eating', 'One-step meal logging'],
+      img: 'Screenshot 2026-06-18 231843.png' },
+    { id: 'track', sub: true, headline: 'Plans should bend when reality does.',
+      body: [
+        'When the user eats something different, Palate captures what actually happened instead of forcing reality to match the plan.',
+        'Users describe the meal and optionally add nutrition info, and Palate estimates missing values.',
+      ],
+      punch: 'What was planned, and what actually happened.',
+      callouts: ['Log unplanned meals', 'Optional manual macros', 'AI estimation for missing values'],
+      img: 'Screenshot 2026-06-18 231905.png' },
+    { id: 'learn', eyebrow: '06 / LEARN', headline: 'Turn execution into feedback.',
+      body: [
+        'Because planning, shopping and eating live inside the same system, Palate can analyse more than isolated calorie entries.',
+        'The weekly view surfaces adherence, calorie and macro patterns, and progress toward wider goals.',
+      ],
+      callouts: ['Weekly adherence', 'Calorie tracking', 'Macro distribution'],
+      img: 'Screenshot 2026-06-18 231935.png' },
+    { id: 'learn2', sub: true, headline: 'Every week becomes information for the next one.',
+      body: ['Over longer periods, the opportunity is for this behavioural history to influence what Palate proposes next.'],
+      callouts: ['Macro energy split', 'Weight trajectory'],
+      img: 'Screenshot 2026-06-18 231954.png' },
+    { id: 'constraints', eyebrow: 'THE SYSTEM AROUND THE USER', headline: 'One plan has to satisfy more than nutrition.',
+      body: [
+        'A useful recommendation has to survive contact with real life. Palate plans around the things that usually make healthy eating fall apart.',
+      ],
+      punch: 'Diet \u00d7 allergies \u00d7 goals \u00d7 budget \u00d7 time \u00d7 preference',
+      body2: [
+        '',
+        'The system quietly keeps the week aligned in the background.',
+      ],
+      closingLine: 'Healthy eating becomes less of a daily management problem, and more of something that simply happens.',
+      callouts: ['Diet & allergies', 'Goal-based targets', 'Weekly budget tier'],
+      img: 'Screenshot 2026-06-18 232015.png' },
+  ];
+
+  CHAPTER_LABELS = ['Plan', 'Shop', 'Cook', 'Track', 'Learn'];
+
+  state = { activeIndex: 0, view: 'product', playing: false, currentTime: 0, duration: 0 };
+  sectionEls = {};
+
+  videoRef = React.createRef();
+
+  registerRef = (i, el) => { this.sectionEls[i] = el; };
+
+  showProductView = () => this.setState({ view: 'product' });
+  showVideoViewFn = () => this.setState({ view: 'video' });
+  setVideoRef = (el) => { this.videoRef.current = el; };
+  onPlayClick = () => {
+    const v = this.videoRef.current;
+    if (v) { v.play().catch(() => {}); }
+    this.setState({ playing: true, ended: false });
+  };
+  onPlay = () => this.setState({ playing: true, ended: false });
+  onTimeUpdate = (e) => this.setState({ currentTime: e.target.currentTime, duration: e.target.duration || 0 });
+
+  componentDidMount() {
+    this.handleScroll = () => {
+      if (this._raf) return;
+      this._raf = requestAnimationFrame(() => { this._raf = null; this.pickActive(); });
+    };
+    window.addEventListener('scroll', this.handleScroll, { passive: true });
+    window.addEventListener('resize', this.handleScroll);
+    this.pickActive();
+  }
+
+  pickActive() {
+    const mid = window.innerHeight * 0.45;
+    let best = null, bestDist = Infinity;
+    this.STAGES.forEach((_, i) => {
+      const el = this.sectionEls[i];
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      const dist = (mid >= r.top && mid <= r.bottom) ? 0 : Math.min(Math.abs(r.top - mid), Math.abs(r.bottom - mid));
+      if (dist < bestDist) { bestDist = dist; best = i; }
+    });
+    if (best !== null && best !== this.state.activeIndex) this.setState({ activeIndex: best });
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener('resize', this.handleScroll);
+    if (this._raf) cancelAnimationFrame(this._raf);
+  }
+
+  renderVals() {
+    const activeIndex = this.state.activeIndex;
+    const encodeImg = (name) => encodeURI('uploads/' + name);
+
+    const dots = this.STAGES.map((_, i) => ({
+      style: {
+        width: '6px', height: '6px', borderRadius: '0',
+        background: i === activeIndex ? 'var(--color-accent)' : 'var(--color-divider)',
+        transition: 'background 0.3s ease',
+      },
+    }));
+
+    const stages = this.STAGES.map((s, i) => {
+      const isActive = i === activeIndex;
+      return {
+        ...s,
+        img: encodeImg(s.img),
+        setRef: (el) => this.registerRef(i, el),
+        wrapStyle: {
+          minHeight: '82vh', display: 'flex', flexDirection: 'column', justifyContent: 'center',
+          padding: '48px 0', transition: 'opacity 0.4s ease',
+          opacity: isActive ? 1 : 0.4,
+        },
+        eyebrowStyle: {
+          display: 'block', fontSize: '13px', fontWeight: 600, letterSpacing: '0.08em',
+          textTransform: 'uppercase', color: 'var(--color-accent-700)', marginBottom: '16px',
+        },
+        headlineStyle: {
+          fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-heading-weight)',
+          fontSize: s.sub ? 'clamp(22px,2.6vw,30px)' : 'clamp(28px,3.4vw,42px)',
+          lineHeight: 1.2, letterSpacing: '-0.015em', margin: '0 0 20px', maxWidth: '18ch',
+          color: 'var(--color-text)',
+        },
+        bodyStyle: {
+          fontSize: '16px', lineHeight: 1.65, color: 'color-mix(in srgb, var(--color-text) 78%, transparent)',
+          margin: '0 0 14px', maxWidth: '48ch',
+        },
+        punchStyle: {
+          fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-heading-weight)',
+          fontSize: '20px', letterSpacing: '-0.01em', color: 'var(--color-text)',
+          margin: '4px 0 20px', maxWidth: '30ch',
+        },
+        calloutsWrapStyle: { display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '8px' },
+        closingLineStyle: {
+          fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '17px',
+          lineHeight: 1.4, color: 'var(--color-accent-700)', margin: '4px 0 20px', maxWidth: '40ch',
+        },
+      };
+    });
+
+    const systemLabels = ['Goals + Preferences + Budget', 'Plan', 'Shop', 'Cook', 'Eat', 'Learn'];
+    const systemSteps = systemLabels.map((label, i) => ({
+      label,
+      showArrow: i < systemLabels.length - 1,
+      pillStyle: {
+        fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-heading-weight)',
+        fontSize: i === 0 ? '14px' : '16px', padding: i === 0 ? '10px 18px' : '12px 22px',
+        border: i === 0 ? '1px solid var(--color-divider)' : '2px solid var(--color-text)',
+        color: i === 0 ? 'color-mix(in srgb, var(--color-text) 70%, transparent)' : 'var(--color-text)',
+        background: 'var(--color-bg)',
+      },
+    }));
+
+    const showProduct = this.state.view === 'product';
+    const showVideo = this.state.view === 'video';
+    const toggleBtnBase = {
+      fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600,
+      padding: '11px 18px', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap',
+    };
+    const productBtnStyle = { ...toggleBtnBase, background: showProduct ? 'var(--color-text)' : 'transparent', color: showProduct ? 'var(--color-bg)' : 'var(--color-text)' };
+    const videoBtnStyle = { ...toggleBtnBase, background: showVideo ? 'var(--color-text)' : 'transparent', color: showVideo ? 'var(--color-bg)' : 'var(--color-text)', borderLeft: '1px solid var(--color-text)' };
+
+    const videoSrc = encodeURI('uploads/palate recrding (1).mp4');
+    const showPlayOverlay = !this.state.playing;
+    
+    const duration = this.state.duration || 53;
+    const activeChapterIdx = this.state.playing
+      ? Math.min(this.CHAPTER_LABELS.length - 1, Math.floor((this.state.currentTime / duration) * this.CHAPTER_LABELS.length))
+      : -1;
+    const chapters = this.CHAPTER_LABELS.map((label, i) => ({
+      label,
+      style: {
+        fontSize: '12px', fontWeight: 600, letterSpacing: '0.04em', textTransform: 'uppercase',
+        color: i === activeChapterIdx ? 'var(--color-accent-700)' : 'color-mix(in srgb, var(--color-text) 45%, transparent)',
+        transition: 'color 0.3s ease', padding: '4px 0',
+      },
+      afterStyle: i < this.CHAPTER_LABELS.length - 1
+        ? { content: '"→"', margin: '0 12px', color: 'color-mix(in srgb, var(--color-text) 30%, transparent)' }
+        : { content: '""' },
+    }));
+
+    const sequenceSteps = ['Plan', 'Shop', 'Cook', 'Log', 'Learn'];
+    const observations = [
+      { num: '01 / ORCHESTRATION', title: 'Palate coordinates the moving parts for you.', body: 'Goals, budget, preferences, groceries and meals are continuously translated into an executable plan instead of being managed separately.' },
+      { num: '02 / FEEDBACK LOOP', title: 'Know whether you\u2019re moving closer to your goal.', body: 'Palate compares what was planned with what actually happened, using nutrition, adherence and progress signals to show whether the current system is moving the user toward or away from their goal.' },
+      { num: '03 / FLEXIBILITY', title: 'Structured when useful, flexible when necessary.', body: 'Quick meals, recipe swaps and manual logging let reality interrupt the plan without breaking the wider system.' },
+    ];
+
+    if (this._lastFrontIndex === undefined) this._lastFrontIndex = activeIndex;
+    const prevIndex = this._lastFrontIndex;
+    this._lastFrontIndex = activeIndex;
+    const frontStage = { ...this.STAGES[activeIndex], img: encodeImg(this.STAGES[activeIndex].img) };
+    const backStage = { ...this.STAGES[prevIndex], img: encodeImg(this.STAGES[prevIndex].img) };
+    const visualContainerStyle = {
+      position: 'relative', aspectRatio: '760 / 1341', height: 'min(530px, calc(100vh - 220px))',
+      width: 'auto', maxWidth: '300px', margin: '0 auto',
+      border: '2px solid #111', borderRadius: '0', background: '#f2f1ed',
+      boxShadow: 'var(--shadow-lg)', overflow: 'hidden',
+    };
+    const layerBaseStyle = {
+      position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'contain',
+      border: 'none', borderRadius: '0', background: '#f2f1ed',
+    };
+    const backImgStyle = { ...layerBaseStyle, opacity: 1, zIndex: 1 };
+    const frontImgStyle = { ...layerBaseStyle, zIndex: 2, animation: 'pwFade 0.5s ease both' };
+
+    return {
+      stages, activeStage: stages[activeIndex], frontStage, backStage, visualContainerStyle, frontImgStyle, backImgStyle, dots,
+      stageCounter: `${String(activeIndex + 1).padStart(2, '0')} / ${String(this.STAGES.length).padStart(2, '0')}`,
+      systemSteps,
+      showProduct, showVideo, productBtnStyle, videoBtnStyle,
+      showProductView: this.showProductView, showVideoViewFn: this.showVideoViewFn,
+      setVideoRef: this.setVideoRef, onPlayClick: this.onPlayClick, onPlay: this.onPlay,
+      onTimeUpdate: this.onTimeUpdate,
+      videoSrc, showPlayOverlay, chapters, sequenceSteps, observations,
+    };
+  }
+}
+
+</script>
+</body>
+</html>

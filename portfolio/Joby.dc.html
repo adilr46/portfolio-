@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Joby — Adil Rasheed</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet>
+  <link rel="stylesheet" href="_ds/modernist-13ec4272-7ce8-4ae4-9e5b-5b6bf80f3f12/styles.css">
+  <script src="_ds/modernist-13ec4272-7ce8-4ae4-9e5b-5b6bf80f3f12/_ds_bundle.js"></script>
+  <style>
+    body{background:var(--color-bg);color:var(--color-text)}
+    a{color:var(--color-accent-700)}
+    a:hover{color:var(--color-accent)}
+    .jb-wrap{max-width:1280px;margin:0 auto;padding-left:clamp(20px,6vw,80px);padding-right:clamp(20px,6vw,80px)}
+    .jb-screen{border:2px solid var(--color-text);background:var(--color-bg);box-shadow:var(--shadow-md)}
+    .jb-arrow{color:var(--color-accent-700);font-size:20px;font-weight:800}
+    @media (max-width:860px){.jb-grid2{grid-template-columns:1fr !important}.jb-grid3{grid-template-columns:1fr !important}.jb-flow-row{flex-direction:column !important}.jb-flow-row .jb-arrow{transform:rotate(90deg)}}
+    .pf-cursor-dot{position:fixed;top:0;left:0;width:9px;height:9px;border-radius:50%;background:var(--color-accent-700);pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width 0.15s ease,height 0.15s ease,opacity 0.15s ease;opacity:0.55}
+    .pf-cursor-dot.pf-cursor-hover{width:15px;height:15px;opacity:0.85}
+    .pf-cursor-dot.pf-cursor-strong{width:26px;height:26px;opacity:0.95}
+    @media (hover:none),(pointer:coarse){.pf-cursor-dot{display:none}}
+    .pf-cursor-trail{position:fixed;inset:0;pointer-events:none;z-index:9998}
+    @media (hover:none),(pointer:coarse){.pf-cursor-trail{display:none}}
+  </style>
+  <script>
+  (function(){
+    function init(){
+      var dot=document.createElement('div');
+      dot.className='pf-cursor-dot';
+      document.body.appendChild(dot);
+      document.addEventListener('mousemove',function(e){dot.style.left=e.clientX+'px';dot.style.top=e.clientY+'px';});
+      document.addEventListener('mouseover',function(e){
+        var strong=e.target.closest('a,button,.btn');
+        var soft=strong||e.target.closest('[role="button"],.tag,input,select,textarea');
+        dot.classList.toggle('pf-cursor-strong',!!strong);
+        dot.classList.toggle('pf-cursor-hover',!!soft&&!strong);
+      });
+      document.addEventListener('mouseout',function(e){
+        if(e.target.closest('a,button,.btn,[role="button"],.tag,input,select,textarea')){
+          dot.classList.remove('pf-cursor-hover');
+          dot.classList.remove('pf-cursor-strong');
+        }
+      });
+      if(window.matchMedia('(prefers-reduced-motion: reduce)').matches||window.matchMedia('(hover: none), (pointer: coarse)').matches)return;
+      var canvas=document.createElement('canvas');
+      canvas.className='pf-cursor-trail';
+      document.body.appendChild(canvas);
+      var ctx=canvas.getContext('2d');
+      function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+      resize();
+      window.addEventListener('resize',resize);
+      var accent=getComputedStyle(document.documentElement).getPropertyValue('--color-accent-700').trim()||'#8a1f11';
+      var mx=null,my=null,tx=null,ty=null;
+      var tmr=null;
+    document.addEventListener('mousemove',function(e){
+      tx=e.clientX;ty=e.clientY;if(mx===null){mx=tx;my=ty;}
+      if(tmr)clearTimeout(tmr);
+      tmr=setTimeout(function(){ctx.clearRect(0,0,canvas.width,canvas.height);tx=null;mx=null;},220);
+    });
+      function frame(){
+        if(tx!==null){
+          var dx=tx-mx,dy=ty-my;
+          var dist=Math.sqrt(dx*dx+dy*dy);
+          mx+=dx*0.3;my+=dy*0.3;
+          ctx.globalCompositeOperation='destination-out';
+          ctx.fillStyle='rgba(0,0,0,0.26)';
+          ctx.fillRect(0,0,canvas.width,canvas.height);
+          ctx.globalCompositeOperation='source-over';
+          ctx.strokeStyle=accent;
+          ctx.globalAlpha=Math.min(0.32,0.16+dist*0.006);
+          ctx.lineWidth=Math.min(3.5,1.4+dist*0.06);
+          ctx.lineCap='round';
+          ctx.beginPath();
+          ctx.moveTo(mx-dx*0.3,my-dy*0.3);
+          ctx.lineTo(mx,my);
+          ctx.stroke();
+          ctx.globalAlpha=1;
+        }
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    }
+    if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init);}else{init();}
+  })();
+  </script>
+</helmet>
+
+<div style="font-family:var(--font-body)">
+
+  <div class="jb-wrap" style="display:flex;align-items:center;justify-content:space-between;padding-top:28px;padding-bottom:28px">
+    <a href="index.html" style="font-family:var(--font-heading);font-weight:700;font-size:14px;color:var(--color-accent-700);text-decoration:none" style-hover="color:var(--color-accent)">← Portfolio</a>
+    <span style="font-family:var(--font-heading);font-weight:800;font-size:15px">Joby</span>
+  </div>
+  <hr class="hr" style="margin:0">
+
+  <!-- HERO -->
+  <section class="jb-wrap" style="padding-top:88px;padding-bottom:96px">
+    <span style="display:block;font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:20px">Joby</span>
+    <h1 style="font-size:clamp(38px,6vw,72px);line-height:1.04;letter-spacing:-0.02em;max-width:20ch;margin:0 0 20px">A placement application tool built around one reusable profile</h1>
+    <p style="font-size:17px;line-height:1.55;max-width:60ch;color:color-mix(in srgb, var(--color-text) 75%, transparent);margin:0">Joby helps university students apply for placements without rebuilding their CV and answers from scratch every time, while keeping them in control of what gets reused and what changes.</p>
+  </section>
+
+  <hr class="hr" style="margin:0">
+
+  <!-- 1. THE PLACEMENT-YEAR PROBLEM -->
+  <section class="jb-wrap" style="padding:104px 0">
+    <h2 style="font-size:clamp(28px,3.8vw,44px);max-width:24ch;margin:0 0 40px">Application admin becomes a major time sink in second year</h2>
+    <p style="font-size:16px;line-height:1.6;max-width:62ch;color:color-mix(in srgb, var(--color-text) 70%, transparent);margin:0 0 16px">Applying for placements becomes a second workload alongside university. Repeated CV tailoring, near-identical application forms, re-entering the same information into different portals, and tracking submissions across companies add up to a massive amount of time and cognitive bandwidth, far more than it first appears.</p>
+    <p style="font-size:16px;line-height:1.6;max-width:62ch;color:color-mix(in srgb, var(--color-text) 70%, transparent);margin:0 0 48px">The deeper cost isn't just time spent applying. A substantial portion of second year gets diverted away from coursework, technical projects, interview preparation, and learning new skills.</p>
+    <div>
+      <div style="display:flex;height:56px;border:2px solid var(--color-text);overflow:hidden;margin-bottom:10px">
+        <sc-for list="{{ weekSplit }}" as="w" hint-placeholder-count="5">
+          <div style="{{ w.style }}"></div>
+        </sc-for>
+      </div>
+      <p style="font-size:12px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:var(--color-accent-700);margin:0 0 12px">↑ Large share lost to repetitive admin</p>
+      <div style="display:flex;flex-wrap:wrap;gap:16px">
+        <sc-for list="{{ weekSplit }}" as="w" hint-placeholder-count="5">
+          <span style="display:flex;align-items:center;gap:6px;font-size:13px;color:color-mix(in srgb, var(--color-text) 65%, transparent)"><span style="{{ w.dotStyle }}"></span>{{ w.label }}</span>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. TRANSLATION -->
+  <section style="background:var(--color-surface);padding:104px 0">
+    <div class="jb-wrap">
+      <h2 style="font-size:clamp(28px,3.6vw,42px);max-width:22ch;margin:0 0 24px">The student changes less than the application does</h2>
+      <p style="font-size:16px;line-height:1.6;max-width:62ch;color:color-mix(in srgb, var(--color-text) 70%, transparent);margin:0 0 48px">A student's underlying experience is largely the same across applications. What changes is the role, the company, the job description, and which experiences matter most and how they should be presented. Joby treats each placement as a new translation of the same underlying professional information, not a new application built from nothing.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px">
+        <sc-for list="{{ translationTabs }}" as="t" hint-placeholder-count="3">
+          <button style="{{ t.style }}" onClick="{{ t.onClick }}">{{ t.label }}</button>
+        </sc-for>
+      </div>
+      <div class="jb-screen" style="padding:24px;max-width:640px">
+        <span style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent);display:block;margin-bottom:8px">Same project — {{ activeTranslation.role }}</span>
+        <p style="font-family:var(--font-heading);font-weight:700;font-size:16px;margin:0">{{ activeTranslation.framing }}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. GIVE JOBY THE FACTS ONCE -->
+  <section class="jb-wrap" style="padding:104px 0">
+    <h2 style="font-size:clamp(28px,3.6vw,42px);max-width:22ch;margin:0 0 24px">Give Joby the facts once</h2>
+    <p style="font-size:16px;line-height:1.6;max-width:62ch;color:color-mix(in srgb, var(--color-text) 70%, transparent);margin:0 0 40px">Instead of repeatedly rebuilding their professional information, the student gives Joby their existing CV once. Joby organises that material into a reusable profile of experience, education, projects, skills and achievements. AI may help extract and structure it, but never silently decides that an interpretation is true.</p>
+    <div class="jb-flow-row" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:40px">
+      <div class="jb-screen" style="padding:14px 18px">Existing CV</div><span class="jb-arrow">→</span>
+      <div class="jb-screen" style="padding:14px 18px">Joby organises the information</div><span class="jb-arrow">→</span>
+      <div class="jb-screen" style="padding:14px 18px;border-color:var(--color-accent-700)">Student reviews suggested facts</div><span class="jb-arrow">→</span>
+      <div class="jb-screen" style="padding:14px 18px">Reusable professional profile</div>
+    </div>
+    <div class="jb-screen" style="max-width:420px;padding:22px">
+      <span style="font-family:var(--font-heading);font-weight:700;font-size:14px;display:block;margin-bottom:14px">"Led a 4-person team building a mobile app"</span>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-primary" style="font-size:13px;padding:8px 14px">Accept</button>
+        <button class="btn btn-secondary" style="font-size:13px;padding:8px 14px">Edit</button>
+        <button class="btn btn-ghost" style="font-size:13px;padding:8px 14px">Reject</button>
+      </div>
+    </div>
+    <p style="font-size:12px;color:color-mix(in srgb, var(--color-text) 50%, transparent);margin-top:24px">Technical layer: Durable Identity</p>
+  </section>
+
+  <hr class="hr" style="margin:0">
+
+  <!-- 4. REUSABLE CV POSITIONING -->
+  <section class="jb-wrap" style="padding:104px 0">
+    <h2 style="font-size:clamp(28px,3.6vw,42px);max-width:24ch;margin:0 0 24px">Reuse the same evidence without sending the same CV everywhere</h2>
+    <p style="font-size:16px;line-height:1.6;max-width:62ch;color:color-mix(in srgb, var(--color-text) 70%, transparent);margin:0 0 40px">Students often need a few broadly different versions of how they present themselves, even though the underlying experience stays the same. Joby maintains reusable CV versions such as Quant, Markets and Investment Banking — not separate identities, but different perspectives on one shared profile.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px">
+      <sc-for list="{{ cvTabs }}" as="t" hint-placeholder-count="3">
+        <button style="{{ t.style }}" onClick="{{ t.onClick }}">{{ t.label }}</button>
+      </sc-for>
+    </div>
+    <div class="jb-screen" style="max-width:640px;padding:24px;margin-bottom:12px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent);display:block;margin-bottom:10px">{{ activeCv.role }} CV</span>
+      <p style="font-family:var(--font-heading);font-weight:700;font-size:15px;margin:0 0 6px">{{ activeCv.emphasis }}</p>
+      <p style="font-size:14px;color:color-mix(in srgb, var(--color-text) 65%, transparent);margin:0">{{ activeCv.wording }}</p>
+    </div>
+    <p style="font-size:13px;color:color-mix(in srgb, var(--color-text) 60%, transparent);margin:0 0 12px">Underlying experience: Built and tested a data-driven trading strategy using market data and quantitative analysis.</p>
+    <span style="font-size:12px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--color-accent-700)">Underlying experience unchanged</span>
+    <p style="font-size:12px;color:color-mix(in srgb, var(--color-text) 50%, transparent);margin-top:32px">Technical layer: Identity Representation</p>
+  </section>
+
+  <!-- 5. THE CORE JOBY WORKFLOW -->
+  <section style="background:var(--color-surface);padding:104px 0">
+    <div class="jb-wrap">
+      <h2 style="font-size:clamp(28px,3.6vw,42px);max-width:24ch;margin:0 0 40px">Drop in a job description. Review what actually needs changing.</h2>
+      <div style="display:flex;flex-direction:column;gap:0;max-width:640px;margin-bottom:24px">
+        <sc-for list="{{ workflowSteps }}" as="ws" hint-placeholder-count="5">
+          <div style="border-left:2px solid var(--color-divider);padding:0 0 24px 20px;position:relative">
+            <span style="position:absolute;left:-7px;top:2px;width:12px;height:12px;background:var(--color-accent-700);border-radius:50%"></span>
+            <span style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent);display:block;margin-bottom:6px">{{ ws.label }}</span>
+            <p style="font-family:var(--font-heading);font-weight:600;font-size:15px;margin:0">{{ ws.detail }}</p>
+          </div>
+        </sc-for>
+      </div>
+      <span style="font-size:12px;color:color-mix(in srgb, var(--color-text) 50%, transparent)">Select → Interpret → Compose → Render</span>
+      <p style="font-size:15px;line-height:1.6;max-width:58ch;color:color-mix(in srgb, var(--color-text) 65%, transparent);margin-top:24px">Joby does the comparison work; the student reviews the meaningful differences.</p>
+    </div>
+  </section>
+
+  <!-- 6. THE HUMAN/AI BOUNDARY -->
+  <section class="jb-wrap" style="padding:104px 0">
+    <h2 style="font-size:clamp(28px,3.6vw,42px);max-width:24ch;margin:0 0 40px">Joby handles the boring decisions. The student keeps the important ones.</h2>
+    <p style="font-size:16px;line-height:1.6;max-width:62ch;color:color-mix(in srgb, var(--color-text) 70%, transparent);margin:0 0 40px">Joby automatically handles low-consequence work — finding relevant experience, reordering evidence, adapting wording, detecting repeated information, spotting inconsistencies. It stops when something requires the student's judgement.</p>
+    <div class="jb-grid2" style="display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--color-divider);margin-bottom:32px">
+      <div style="background:var(--color-bg);padding:24px">
+        <span style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent);display:block;margin-bottom:14px">Routine path</span>
+        <p style="font-family:var(--font-heading);font-weight:600;font-size:15px;margin:0;line-height:1.9">Joby finds relevant evidence<br>↓<br>adapts application<br>↓<br>continues</p>
+      </div>
+      <div style="background:var(--color-bg);padding:24px;border-left:2px solid var(--color-accent-700)">
+        <span style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--color-accent-700);display:block;margin-bottom:14px">Student decision path</span>
+        <p style="font-family:var(--font-heading);font-weight:600;font-size:15px;margin:0;line-height:1.9">Joby finds uncertainty or conflict<br>↓<br>surfaces it clearly<br>↓<br>student decides<br>↓<br>continues</p>
+      </div>
+    </div>
+    <div class="jb-screen" style="max-width:480px;padding:22px;border-color:var(--color-accent-700)">
+      <p style="font-family:var(--font-heading);font-weight:600;font-size:15px;margin:0 0 16px">This role matches your work-location preference, but may conflict with your Right to Work constraints.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-primary" style="font-size:13px;padding:8px 14px">Confirm</button>
+        <button class="btn btn-secondary" style="font-size:13px;padding:8px 14px">Review</button>
+        <button class="btn btn-ghost" style="font-size:13px;padding:8px 14px">Continue anyway</button>
+      </div>
+    </div>
+  </section>
+
+  <hr class="hr" style="margin:0">
+
+  <!-- 7. THE ENGINEERING IDEA -->
+  <section class="jb-wrap" style="padding:104px 0">
+    <h2 style="font-size:clamp(28px,3.6vw,42px);max-width:24ch;margin:0 0 24px">Tailoring one application should not break the next one</h2>
+    <p style="font-size:16px;line-height:1.6;max-width:62ch;color:color-mix(in srgb, var(--color-text) 70%, transparent);margin:0 0 40px">Joby keeps three kinds of information separate: what is actually true about the student, how they usually present themselves, and what changes temporarily for one application. If these were stored as the same thing, every application edit could accidentally change the student's permanent profile or another CV version.</p>
+    <div style="display:flex;flex-direction:column;gap:0;max-width:420px;margin-bottom:16px">
+      <div class="jb-screen" style="padding:16px 20px">
+        <span style="font-family:var(--font-heading);font-weight:700;font-size:15px;display:block">Student Profile</span>
+        <span style="font-size:12px;color:color-mix(in srgb, var(--color-text) 55%, transparent)">What is true</span>
+      </div>
+      <span class="jb-arrow" style="text-align:center;padding:4px 0">↓</span>
+      <div class="jb-screen" style="padding:16px 20px">
+        <span style="font-family:var(--font-heading);font-weight:700;font-size:15px;display:block">Reusable CV Version</span>
+        <span style="font-size:12px;color:color-mix(in srgb, var(--color-text) 55%, transparent)">How I usually present it</span>
+      </div>
+      <span class="jb-arrow" style="text-align:center;padding:4px 0">↓</span>
+      <div class="jb-screen" style="padding:16px 20px;border-color:var(--color-accent-700)">
+        <span style="font-family:var(--font-heading);font-weight:700;font-size:15px;display:block">This Application</span>
+        <span style="font-size:12px;color:color-mix(in srgb, var(--color-text) 55%, transparent)">What changes here</span>
+      </div>
+    </div>
+    <p style="font-size:13px;color:color-mix(in srgb, var(--color-text) 55%, transparent);margin:0 0 24px">⛔ This Application does not write back to Student Profile</p>
+    <p style="font-size:15px;line-height:1.6;max-width:58ch;color:color-mix(in srgb, var(--color-text) 65%, transparent);margin:0 0 24px">A one-off CV edit stays one-off unless the student explicitly decides otherwise.</p>
+    <p style="font-size:12px;color:color-mix(in srgb, var(--color-text) 50%, transparent);margin:0">Technical layer: Durable Identity · Identity Representation · Adaptation</p>
+  </section>
+
+  <!-- 8. BEHAVIOURAL EVIDENCE -->
+  <section style="background:var(--color-surface);padding:104px 0">
+    <div class="jb-wrap">
+      <h2 style="font-size:clamp(28px,3.6vw,42px);max-width:24ch;margin:0 0 40px">Joby keeps a distinction between what it remembers and what it leaves be</h2>
+      <div style="display:flex;flex-direction:column;gap:0">
+        <sc-for list="{{ traces }}" as="tr" hint-placeholder-count="6">
+          <div style="display:grid;grid-template-columns:1.3fr 1.7fr;gap:24px;padding:22px 0;border-bottom:1px solid var(--color-divider);align-items:center">
+            <span style="font-family:var(--font-heading);font-weight:700;font-size:15px">{{ tr.action }}</span>
+            <span style="font-size:14px;color:color-mix(in srgb, var(--color-text) 65%, transparent)">{{ tr.result }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <div class="jb-wrap" style="padding:40px 0 64px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;border-top:2px solid var(--color-divider)">
+    <a href="index.html" style="font-family:var(--font-heading);font-weight:600;font-size:13px;color:var(--color-text);text-decoration:none">← Portfolio</a>
+    <a href="Twyst.dc.html" style="font-family:var(--font-heading);font-weight:600;font-size:13px;color:var(--color-text);text-decoration:none">Next project →</a>
+  </div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { translation: 'swe', cv: 'quant' };
+
+  TRANSLATIONS = {
+    swe: { label: 'Software Engineering', role: 'Software Engineering', framing: 'Presented as the technical implementation: architecture choices, APIs built, and problems solved in code.' },
+    product: { label: 'Product', role: 'Product', framing: 'Presented as product problem-solving: what user need it addressed and how scope was prioritised.' },
+    solutions: { label: 'Solutions', role: 'Solutions / Technical Consulting', framing: 'Presented as customer requirement translation: how technical constraints were explained to non-technical stakeholders.' },
+  };
+
+  CVS = {
+    quant: { role: 'Quant', emphasis: 'Designed and evaluated a quantitative trading strategy using market data and statistical analysis.', wording: 'Emphasised modelling, experimentation and quantitative reasoning.' },
+    markets: { role: 'Markets', emphasis: 'Analysed market behaviour and translated trading signals into actionable positioning decisions.', wording: 'Emphasised market interpretation, risk and trading judgement.' },
+    ib: { role: 'Investment Banking', emphasis: 'Used financial and market analysis to evaluate opportunities and support structured decision-making.', wording: 'Emphasised commercial analysis, financial reasoning and communication.' },
+  };
+
+  renderVals() {
+    const tKey = this.state.translation;
+    const cKey = this.state.cv;
+    const tabStyle = (active) => `font-family:var(--font-heading);font-weight:700;font-size:13px;padding:9px 16px;border:1px solid ${active ? 'var(--color-accent-700)' : 'var(--color-divider)'};background:${active ? 'var(--color-accent-700)' : 'transparent'};color:${active ? 'var(--color-bg)' : 'var(--color-text)'};cursor:pointer`;
+
+    return {
+      weekSplit: [
+        { label: 'University', style: 'flex:2;background:var(--color-text)' },
+        { label: 'Projects', style: 'flex:1.4;background:color-mix(in srgb, var(--color-text) 75%, transparent)' },
+        { label: 'Learning', style: 'flex:1;background:color-mix(in srgb, var(--color-text) 55%, transparent)' },
+        { label: 'Interview prep', style: 'flex:0.8;background:color-mix(in srgb, var(--color-text) 35%, transparent)' },
+        { label: 'Application admin', style: 'flex:3.8;background:var(--color-accent-700)' },
+      ].map((w) => ({ style: w.style, dotStyle: `width:8px;height:8px;background:${w.style.split('background:')[1]}`, label: w.label })),
+      translationTabs: Object.keys(this.TRANSLATIONS).map((k) => ({
+        label: this.TRANSLATIONS[k].label, style: tabStyle(k === tKey), onClick: () => this.setState({ translation: k }),
+      })),
+      activeTranslation: this.TRANSLATIONS[tKey],
+      cvTabs: Object.keys(this.CVS).map((k) => ({
+        label: this.CVS[k].role, style: tabStyle(k === cKey), onClick: () => this.setState({ cv: k }),
+      })),
+      activeCv: this.CVS[cKey],
+      workflowSteps: [
+        { label: 'Paste job description', detail: 'The student drops in the placement\'s job description.' },
+        { label: 'What this role appears to care about', detail: 'Python, APIs, customer-facing problem solving.' },
+        { label: 'Relevant evidence from your profile', detail: 'Project A, Internship B, Project C.' },
+        { label: 'Suggested CV changes', detail: 'Move Project A higher, expand API implementation, reduce unrelated research detail, bring customer-facing work forward.' },
+        { label: 'Updated CV', detail: 'The student inspects and approves the changes before it goes out.' },
+      ],
+      traces: [
+        { action: 'Correct a project date once', result: 'The correction appears in future CV versions.' },
+        { action: 'Hide a project from the Product CV', result: 'It still exists in the student\'s main profile.' },
+        { action: 'Apply for a role where that project matters', result: 'Joby can surface it again.' },
+        { action: 'Change wording for one application', result: 'The student\'s normal reusable CV remains unchanged.' },
+        { action: 'Joby is unsure', result: 'It asks.' },
+        { action: 'Sponsorship or availability conflicts with the role', result: 'Joby surfaces the mismatch but does not stop the student from proceeding.' },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

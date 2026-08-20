@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CyberFileTracker — Adil Rasheed</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet>
+  <link rel="stylesheet" href="_ds/modernist-13ec4272-7ce8-4ae4-9e5b-5b6bf80f3f12/styles.css">
+  <script src="_ds/modernist-13ec4272-7ce8-4ae4-9e5b-5b6bf80f3f12/_ds_bundle.js"></script>
+  <style>
+    body{background:var(--color-bg);color:var(--color-text)}
+    a{color:var(--color-accent-700)}
+    a:hover{color:var(--color-accent)}
+    .cf-wrap{max-width:1280px;margin:0 auto;padding-left:clamp(20px,6vw,80px);padding-right:clamp(20px,6vw,80px)}
+    .cf-screen{border:2px solid var(--color-text);background:var(--color-bg);box-shadow:var(--shadow-md)}
+    .cf-arrow{color:var(--color-accent-700);font-size:20px;font-weight:800}
+    .cf-code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;background:var(--color-text);color:#f3f2f2;padding:16px 18px;white-space:pre;overflow-x:auto;line-height:1.6}
+    @media (max-width:860px){.cf-grid2{grid-template-columns:1fr !important}.cf-flow-row{flex-direction:column !important}.cf-flow-row .cf-arrow{transform:rotate(90deg)}}
+    .pf-cursor-dot{position:fixed;top:0;left:0;width:9px;height:9px;border-radius:50%;background:var(--color-accent-700);pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width 0.15s ease,height 0.15s ease,opacity 0.15s ease;opacity:0.55}
+    .pf-cursor-dot.pf-cursor-hover{width:15px;height:15px;opacity:0.85}
+    .pf-cursor-dot.pf-cursor-strong{width:26px;height:26px;opacity:0.95}
+    @media (hover:none),(pointer:coarse){.pf-cursor-dot{display:none}}
+    .pf-cursor-trail{position:fixed;inset:0;pointer-events:none;z-index:9998}
+    @media (hover:none),(pointer:coarse){.pf-cursor-trail{display:none}}
+  </style>
+  <script>
+  (function(){
+    function init(){
+      var dot=document.createElement('div');
+      dot.className='pf-cursor-dot';
+      document.body.appendChild(dot);
+      document.addEventListener('mousemove',function(e){dot.style.left=e.clientX+'px';dot.style.top=e.clientY+'px';});
+      document.addEventListener('mouseover',function(e){
+        var strong=e.target.closest('a,button,.btn');
+        var soft=strong||e.target.closest('[role="button"],.tag,input,select,textarea');
+        dot.classList.toggle('pf-cursor-strong',!!strong);
+        dot.classList.toggle('pf-cursor-hover',!!soft&&!strong);
+      });
+      document.addEventListener('mouseout',function(e){
+        if(e.target.closest('a,button,.btn,[role="button"],.tag,input,select,textarea')){
+          dot.classList.remove('pf-cursor-hover');
+          dot.classList.remove('pf-cursor-strong');
+        }
+      });
+      if(window.matchMedia('(prefers-reduced-motion: reduce)').matches||window.matchMedia('(hover: none), (pointer: coarse)').matches)return;
+      var canvas=document.createElement('canvas');
+      canvas.className='pf-cursor-trail';
+      document.body.appendChild(canvas);
+      var ctx=canvas.getContext('2d');
+      function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+      resize();
+      window.addEventListener('resize',resize);
+      var accent=getComputedStyle(document.documentElement).getPropertyValue('--color-accent-700').trim()||'#8a1f11';
+      var mx=null,my=null,tx=null,ty=null;
+      var tmr=null;
+    document.addEventListener('mousemove',function(e){
+      tx=e.clientX;ty=e.clientY;if(mx===null){mx=tx;my=ty;}
+      if(tmr)clearTimeout(tmr);
+      tmr=setTimeout(function(){ctx.clearRect(0,0,canvas.width,canvas.height);tx=null;mx=null;},220);
+    });
+      function frame(){
+        if(tx!==null){
+          var dx=tx-mx,dy=ty-my;
+          var dist=Math.sqrt(dx*dx+dy*dy);
+          mx+=dx*0.3;my+=dy*0.3;
+          ctx.globalCompositeOperation='destination-out';
+          ctx.fillStyle='rgba(0,0,0,0.26)';
+          ctx.fillRect(0,0,canvas.width,canvas.height);
+          ctx.globalCompositeOperation='source-over';
+          ctx.strokeStyle=accent;
+          ctx.globalAlpha=Math.min(0.32,0.16+dist*0.006);
+          ctx.lineWidth=Math.min(3.5,1.4+dist*0.06);
+          ctx.lineCap='round';
+          ctx.beginPath();
+          ctx.moveTo(mx-dx*0.3,my-dy*0.3);
+          ctx.lineTo(mx,my);
+          ctx.stroke();
+          ctx.globalAlpha=1;
+        }
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    }
+    if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init);}else{init();}
+  })();
+  </script>
+</helmet>
+
+<div style="font-family:var(--font-body)">
+
+  <div class="cf-wrap" style="display:flex;align-items:center;justify-content:space-between;padding-top:28px;padding-bottom:28px">
+    <a href="index.html" style="font-family:var(--font-heading);font-weight:700;font-size:14px;color:var(--color-accent-700);text-decoration:none" style-hover="color:var(--color-accent)">← Portfolio</a>
+    <span style="font-family:var(--font-heading);font-weight:800;font-size:15px">CyberFileTracker</span>
+  </div>
+
+  <!-- STICKY NAV -->
+  <div style="position:sticky;top:0;z-index:20;background:var(--color-bg);border-top:2px solid var(--color-text);border-bottom:2px solid var(--color-text)">
+    <div class="cf-wrap" style="display:flex;align-items:center;gap:0;padding-top:0;padding-bottom:0">
+      <button style="{{ tabStyle.caseStudy }}" onClick="{{ setView.caseStudy }}">Case Study</button>
+      <button style="{{ tabStyle.techSpecs }}" onClick="{{ setView.techSpecs }}">Technical Specs</button>
+    </div>
+  </div>
+
+  <sc-if value="{{ isCaseStudy }}" hint-placeholder-val="{{ true }}">
+  <div>
+
+  <!-- 1. HERO -->
+  <section class="cf-wrap" style="padding-top:88px;padding-bottom:64px">
+    <span style="display:block;font-size:13px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:20px">CyberFileTracker</span>
+    <h1 style="font-size:clamp(38px,6vw,72px);line-height:1.04;letter-spacing:-0.02em;max-width:20ch;margin:0 0 20px">AI-powered document security</h1>
+    <p style="font-family:var(--font-heading);font-weight:600;font-size:19px;max-width:44ch;color:var(--color-accent-700);margin:0 0 24px">Machine-learning classification with deterministic controls for routing, encryption, and access.</p><p style="font-size:17px;line-height:1.55;max-width:60ch;color:color-mix(in srgb, var(--color-text) 75%, transparent);margin:0 0 32px">CyberFileTracker combines machine-learning document interpretation with deterministic security controls, allowing enterprise documents to be classified intelligently .</p>
+    
+  </section>
+
+  <hr class="hr" style="margin:0">
+
+  <!-- 2. THE PROBLEM (combined) -->
+  <section class="cf-wrap" style="padding:104px 0">
+    <span style="display:block;font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:14px">Concrete Evidence</span>
+    <p style="font-size:15px;line-height:1.6;max-width:64ch;color:color-mix(in srgb, var(--color-text) 65%, transparent);margin:0 0 40px">The system compares the predicted category with the category supplied by the upstream workflow. If they disagree, or confidence is insufficient, the document does not progress into policy binding, encryption, routing, or access.</p>
+    <div class="cf-grid2" style="display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--color-divider);margin-bottom:48px">
+      <div style="background:var(--color-bg);padding:28px">
+        <span style="font-family:var(--font-heading);font-weight:700;font-size:15px;display:block;margin-bottom:6px">Q4_staff_cost_plan.docx</span>
+        <span style="font-size:13px;color:color-mix(in srgb, var(--color-text) 55%, transparent)">Upstream location: Operational</span>
+      </div>
+      <div style="background:var(--color-bg);padding:28px">
+        <span style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--color-accent-700);display:block;margin-bottom:10px">Actual content</span>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:14px;color:color-mix(in srgb, var(--color-text) 70%, transparent)">
+          <span>Salary bands</span><span>Payroll forecasts</span><span>Employee headcount</span><span>Department budgets</span>
+        </div>
+      </div>
+    </div>
+    <div class="cf-flow-row" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <div class="cf-screen" style="padding:14px 18px">Document content</div><span class="cf-arrow">→</span>
+      <div class="cf-screen" style="padding:14px 18px">ML prediction + confidence</div><span class="cf-arrow">→</span>
+      <div class="cf-screen" style="padding:14px 18px">Compare against metadata</div><span class="cf-arrow">→</span>
+      <div class="cf-screen" style="padding:14px 18px;border-color:var(--color-accent-700)">Deterministic routing gate</div><span class="cf-arrow">→</span>
+      <div class="cf-screen" style="padding:14px 18px">Allow or block the next security action</div>
+    </div>
+  </section>
+
+  <hr class="hr" style="margin:0;border-color:var(--color-accent-700)">
+
+  <!-- 4. UNDERSTANDING THE DOCUMENT -->
+  <section class="cf-wrap" style="background:var(--color-surface);padding:104px 0">
+    <span style="display:block;font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:14px">Combined Inputs</span>
+    <div class="cf-grid2" style="display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--color-divider);margin-bottom:40px;margin-top:0">
+      <div style="background:var(--color-bg);padding:28px">
+        <span style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent)">Content</span>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:16px;font-size:14px;color:color-mix(in srgb, var(--color-text) 70%, transparent)">
+          <span>Extracted text</span><span>Document title</span><span>Filename</span><span>Headings</span><span>Recurring phrases</span>
+        </div>
+      </div>
+      <div style="background:var(--color-bg);padding:28px;border-left:2px solid var(--color-divider)">
+        <span style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent)">Workflow context</span>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:16px;font-size:14px;color:color-mix(in srgb, var(--color-text) 70%, transparent)">
+          <span>Originating department</span><span>SAP workflow</span><span>Existing labels</span><span>File type</span><span>Destination</span><span>Uploader context</span>
+        </div>
+      </div>
+    </div>
+    <div class="cf-flow-row" style="display:flex;align-items:center;gap:14px">
+      <div class="cf-screen" style="padding:14px 18px">Combined evidence</div><span class="cf-arrow">→</span>
+      <div class="cf-screen" style="padding:14px 18px;border-color:var(--color-accent-700)">Document classification</div>
+    </div>
+  </section>
+
+  <hr class="hr" style="margin:0">
+
+  <!-- 5. CLASSIFICATION -->
+  <section class="cf-wrap" style="padding:104px 0">
+    <h2 style="font-size:clamp(28px,3.6vw,42px);max-width:22ch;margin:0 0 40px">From document text to category probabilities</h2>
+    <div class="cf-flow-row" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:40px">
+      <div class="cf-screen" style="padding:14px 18px">Text + contextual signals</div><span class="cf-arrow">→</span>
+      <div class="cf-screen" style="padding:14px 18px">Text representation</div><span class="cf-arrow">→</span>
+      <div class="cf-screen" style="padding:14px 18px">Multiclass classifier</div><span class="cf-arrow">→</span>
+      <div class="cf-screen" style="padding:14px 18px;border-color:var(--color-accent-700)">Probability distribution</div>
+    </div>
+    <p style="font-size:15px;color:color-mix(in srgb, var(--color-text) 65%, transparent);max-width:60ch;margin:0 0 32px">Designed with a 2 prong approach : TF-IDF text representation feeding a multinomial logistic regression classifier, chosen for being lightweight, inspectable, fast, and capable of exposing uncertainty on sparse enterprise text, rather than for raw model complexity.</p>
+    <div class="cf-screen" style="max-width:320px;padding:24px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent);display:block;margin-bottom:14px">Output</span>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;justify-content:space-between;font-size:14px"><span style="font-family:var(--font-heading);font-weight:700">Financial</span><span style="color:var(--color-accent-700);font-weight:700">93%</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:14px"><span>Operational</span><span>4%</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:14px"><span>Legal</span><span>1%</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. UNCERTAINTY AS FIRST-CLASS STATE -->
+  <section style="background:var(--color-surface);padding:104px 0">
+    <div class="cf-wrap">
+      <h2 style="font-size:clamp(28px,3.6vw,42px);max-width:22ch;margin:0 0 40px">Ensure traceability across the workflow</h2>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:40px">
+        <sc-for list="{{ stateFields }}" as="f" hint-placeholder-count="9">
+          <span class="tag tag-outline">{{ f }}</span>
+        </sc-for>
+      </div>
+      <p style="font-size:16px;line-height:1.6;max-width:62ch;color:color-mix(in srgb, var(--color-text) 70%, transparent);margin:0 0 24px">The document state records the predicted category, confidence, runner-up, metadata agreement, bound policy, encryption state, workflow state, and access state.</p>
+      
+    </div>
+  </section>
+
+  <!-- 7. THE CONFIDENCE GATE -->
+  <section class="cf-wrap" style="padding:104px 0">
+    <h2 style="font-size:clamp(28px,3.6vw,42px);max-width:20ch;margin:0 0 48px">Gate uncertain classifications before they progress</h2>
+    <div class="cf-grid2" style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--color-divider);margin-bottom:32px">
+      <div style="background:var(--color-bg);padding:26px">
+        <span style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent)">High confidence</span>
+        <p style="font-size:14px;color:color-mix(in srgb, var(--color-text) 65%, transparent);margin:14px 0 20px">Clear separation from alternatives, metadata agreement.</p>
+        <span style="font-family:var(--font-heading);font-weight:800;font-size:16px">→ Progress</span>
+      </div>
+      <div style="background:var(--color-bg);padding:26px;border-left:2px solid var(--color-accent-700)">
+        <span style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--color-accent-700)">Ambiguous</span>
+        <p style="font-size:14px;color:color-mix(in srgb, var(--color-text) 65%, transparent);margin:14px 0 20px">Moderate confidence, competing classifications, or metadata disagreement.</p>
+        <span style="font-family:var(--font-heading);font-weight:800;font-size:16px;color:var(--color-accent-700)">→ Review</span>
+      </div>
+      <div style="background:var(--color-text);padding:26px">
+        <span style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:color-mix(in srgb, var(--color-bg) 55%, transparent)">Unsafe / unresolved</span>
+        <p style="font-size:14px;color:color-mix(in srgb, var(--color-bg) 75%, transparent);margin:14px 0 20px">Weak evidence or high-risk conflict.</p>
+        <span style="font-family:var(--font-heading);font-weight:800;font-size:16px;color:var(--color-accent-400)">→ Fail closed</span>
+      </div>
+    </div>
+  </section>
+
+  <hr class="hr" style="margin:0">
+
+  <!-- 8. STATE MACHINE -->
+  <section class="cf-wrap" style="padding:104px 0">
+    <h2 style="font-size:clamp(28px,3.6vw,42px);max-width:22ch;margin:0 0 48px">Model the document as an explicit state machine</h2>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:32px">
+      <sc-for list="{{ lifecycleStates }}" as="ls" hint-placeholder-count="11">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="tag tag-neutral">{{ ls.name }}</span>
+          <sc-if value="{{ ls.hasArrow }}" hint-placeholder-val="{{ true }}"><span class="cf-arrow" style="font-size:14px">→</span></sc-if>
+        </div>
+      </sc-for>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:32px">
+      <span style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent);align-self:center;margin-right:6px">Failure branches</span>
+      <span class="tag tag-outline">CLASSIFICATION REVIEW</span><span class="tag tag-outline">QUARANTINED</span><span class="tag tag-outline">ACCESS DENIED</span><span class="tag tag-outline">ENCRYPTION FAILED</span><span class="tag tag-outline">KEY RESOLUTION FAILED</span>
+    </div>
+  </section>
+
+  <!-- 9. SECURITY POLICIES -->
+  <section style="background:var(--color-surface);padding:104px 0">
+    <div class="cf-wrap">
+      <h2 style="font-size:clamp(28px,3.6vw,42px);max-width:22ch;margin:0 0 40px">Map accepted classifications to security policy</h2>
+      <div class="cf-flow-row" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:32px">
+        <div class="cf-screen" style="padding:16px 20px">Predicted: Financial</div><span class="cf-arrow">→</span>
+        <div class="cf-screen" style="padding:16px 20px;border-color:var(--color-accent-700)">Policy: Financial Confidential</div><span class="cf-arrow">→</span>
+        <div class="cf-screen" style="padding:16px 20px;text-align:left">
+          <div style="font-size:13px;display:flex;flex-direction:column;gap:4px">
+            <span>Encryption required</span><span>Permitted roles</span><span>Valid workflow destinations</span><span>Valid encryption-key state</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. HARD BOUNDARIES -->
+  <section style="background:var(--color-text);color:var(--color-bg);padding:104px 0">
+    <div class="cf-wrap">
+      <h2 style="font-size:clamp(28px,3.6vw,42px);color:var(--color-bg);margin:0 0 48px">Separate probabilistic classification from deterministic enforcement</h2>
+      <div class="cf-grid2" style="display:grid;grid-template-columns:1fr 1fr;gap:2px;background:color-mix(in srgb, var(--color-bg) 30%, transparent)">
+        <div style="background:var(--color-text);padding:32px">
+          <span style="display:block;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-accent-400);margin-bottom:14px">Probabilistic layer</span>
+          <div style="display:flex;flex-direction:column;gap:8px;font-size:15px;color:color-mix(in srgb, var(--color-bg) 82%, transparent)">
+            <span>Document interpretation</span><span>Category probabilities</span><span>Uncertainty</span><span>Evidence comparison</span>
+          </div>
+        </div>
+        <div style="background:var(--color-text);padding:32px;border-left:2px solid var(--color-accent)">
+          <span style="display:block;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:color-mix(in srgb, var(--color-bg) 55%, transparent);margin-bottom:14px">Deterministic layer</span>
+          <div style="display:flex;flex-direction:column;gap:8px;font-size:15px;color:color-mix(in srgb, var(--color-bg) 82%, transparent)">
+            <span>Policy availability</span><span>Role permissions</span><span>Encryption state</span><span>Key validity</span><span>Workflow validity</span><span>Access authorisation</span><span>Safe failure</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. SUCCESS PATH -->
+  <section class="cf-wrap" style="padding:104px 0">
+    <h2 style="font-size:clamp(24px,3vw,32px);margin:0 0 16px">End-to-end document flow</h2>
+    <p style="font-size:14px;color:color-mix(in srgb, var(--color-text) 55%, transparent);margin:0 0 40px">Supplier invoice — invoice number, VAT, purchase order, bank details, payment terms, finance/procurement workflow context.</p>
+    <div style="display:flex;flex-direction:column;gap:0">
+      <sc-for list="{{ successPath }}" as="s" hint-placeholder-count="10">
+        <div style="display:flex;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid var(--color-divider)">
+          <span style="font-family:var(--font-heading);font-weight:700;font-size:14px;color:color-mix(in srgb, var(--color-text) 45%, transparent);width:24px">{{ s.n }}</span>
+          <span style="font-size:15px">{{ s.label }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <hr class="hr" style="margin:0">
+
+  <!-- 14. ACCESS -->
+  <section class="cf-wrap" style="padding:104px 0">
+    <h2 style="font-size:clamp(28px,3.6vw,42px);max-width:22ch;margin:0 0 40px">Classification and access control are separate decisions</h2>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:40px">
+      <span class="tag tag-neutral">User role</span><span class="tag tag-neutral">Document category</span><span class="tag tag-neutral">Bound policy</span><span class="tag tag-neutral">Encryption state</span><span class="tag tag-neutral">Key version</span><span class="tag tag-neutral">Workflow context</span>
+    </div>
+    <div class="cf-grid2" style="display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--color-divider)">
+      <div style="background:var(--color-bg);padding:26px">
+        <span style="font-family:var(--font-heading);font-weight:800;font-size:18px;color:var(--color-accent-700)">ACCESS AUTHORISED</span>
+        <p style="font-size:13px;color:color-mix(in srgb, var(--color-text) 60%, transparent);margin:10px 0 0">All required conditions succeed.</p>
+      </div>
+      <div style="background:var(--color-text);padding:26px">
+        <span style="font-family:var(--font-heading);font-weight:800;font-size:18px;color:var(--color-bg)">ACCESS DENIED</span>
+        <p style="font-size:13px;color:color-mix(in srgb, var(--color-bg) 75%, transparent);margin:10px 0 0">Document remains encrypted.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 15. SAFE FAILURE -->
+  <section style="background:var(--color-surface);padding:104px 0">
+    <div class="cf-wrap">
+      <h2 style="font-size:clamp(28px,3.6vw,42px);max-width:22ch;margin:0 0 40px">Failures leave the document protected</h2>
+      <div style="display:flex;flex-direction:column;gap:0;margin-bottom:32px">
+        <sc-for list="{{ safeFailures }}" as="sf" hint-placeholder-count="5">
+          <div style="display:grid;grid-template-columns:1fr 24px 1fr;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid var(--color-divider);font-size:15px">
+            <span>{{ sf.cause }}</span><span class="cf-arrow" style="text-align:center">→</span><span style="font-family:var(--font-heading);font-weight:700;color:var(--color-accent-700)">{{ sf.effect }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- 17. INTEGRATION -->
+  <section class="cf-wrap" style="padding:104px 0">
+    <h2 style="font-size:clamp(28px,3.6vw,42px);max-width:22ch;margin:0 0 40px">Integrate with the existing SAP-linked workflow</h2>
+    <div class="cf-flow-row" style="display:flex;flex-direction:column;gap:10px;max-width:520px;margin-bottom:32px">
+      <div class="cf-screen" style="padding:14px 18px">Existing SAP-linked workflow</div>
+      <div class="cf-screen" style="padding:14px 18px;border-color:var(--color-accent-700)">CyberFileTracker intelligence + security-state layer</div>
+      <div class="cf-screen" style="padding:14px 18px">Existing encryption capability</div>
+      <div class="cf-screen" style="padding:14px 18px">Existing routing infrastructure</div>
+    </div>
+  </section>
+
+  <!-- 18. END-TO-END LOOP -->
+  <section style="background:var(--color-surface);padding:104px 0">
+    <div class="cf-wrap">
+      <h2 style="font-size:clamp(28px,3.6vw,42px);margin:0 0 48px">System flow</h2>
+      <div style="display:flex;flex-direction:column;gap:0">
+        <sc-for list="{{ loopSteps }}" as="ls" hint-placeholder-count="8">
+          <div style="display:grid;grid-template-columns:140px 1fr;gap:20px;padding:20px 0;border-bottom:1px solid var(--color-divider);align-items:baseline">
+            <span style="font-family:var(--font-heading);font-weight:800;font-size:20px">{{ ls.name }}</span>
+            <span style="font-size:15px;color:color-mix(in srgb, var(--color-text) 70%, transparent)">{{ ls.desc }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- 20. PRINCIPLES -->
+  <section class="cf-wrap" style="padding:104px 0">
+    <h2 style="font-size:clamp(28px,3.6vw,42px);margin:0 0 48px">Product / engineering principles</h2>
+    <div style="display:flex;flex-direction:column;gap:0">
+      <sc-for list="{{ principles }}" as="p" hint-placeholder-count="6">
+        <div style="display:grid;grid-template-columns:1.2fr 2fr;gap:24px;padding:26px 0;border-bottom:1px solid var(--color-divider)">
+          <span style="font-family:var(--font-heading);font-weight:800;font-size:19px">{{ p.title }}</span>
+          <span style="font-size:15px;color:color-mix(in srgb, var(--color-text) 65%, transparent);align-self:center">{{ p.body }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isTechSpecs }}" hint-placeholder-val="{{ false }}">
+  <div>
+
+  <hr class="hr" style="margin:0">
+
+  <!-- TECH SPECS INDEX -->
+  <section class="cf-wrap" style="padding:56px 0 40px">
+    <div style="display:flex;flex-wrap:wrap;gap:24px">
+      <sc-for list="{{ specIndex }}" as="si" hint-placeholder-count="8">
+        <button style="{{ si.style }}" onClick="{{ si.onClick }}">{{ si.label }}</button>
+      </sc-for>
+    </div>
+  </section>
+
+  <hr class="hr" style="margin:0">
+
+  <!-- 01 PIPELINE ARCHITECTURE -->
+  <section id="spec-01" class="cf-wrap" style="padding:80px 0">
+    <span style="display:block;font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:14px">01 — Pipeline Architecture</span>
+    <p style="font-size:15px;line-height:1.6;max-width:64ch;color:color-mix(in srgb, var(--color-text) 70%, transparent);margin:0 0 32px">The complete runtime path implemented in main.py, from document intake to authorised (or denied) decryption.</p><div style="display:flex;flex-wrap:wrap;gap:8px">
+      <sc-for list="{{ runtimeFlow }}" as="f" hint-placeholder-count="9">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="cf-screen" style="padding:10px 14px;font-size:12.5px">{{ f.label }}</div>
+          <sc-if value="{{ f.hasArrow }}" hint-placeholder-val="{{ true }}"><span class="cf-arrow" style="font-size:14px">→</span></sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <hr class="hr" style="margin:0">
+
+  <!-- 02 DOCUMENT & EVIDENCE MODEL -->
+  <section id="spec-02" class="cf-wrap" style="padding:80px 0">
+    <span style="display:block;font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:14px">02 — Document &amp; Evidence Model</span>
+    <div class="cf-code" style="margin-bottom:28px">class Document(TypedDict):
+    doc_id: str
+    content: str
+    metadata_category: str
+    true_label: str</div>
+    <div class="cf-grid2" style="display:grid;grid-template-columns:repeat(2,1fr);gap:2px;background:var(--color-divider);margin-bottom:28px">
+      <div style="background:var(--color-bg);padding:22px">
+        <span style="font-family:var(--font-heading);font-weight:700;font-size:14px;display:block;margin-bottom:6px">Metadata Category</span>
+        <span style="font-size:12px;color:color-mix(in srgb, var(--color-text) 55%, transparent);display:block;margin-bottom:10px">Upstream workflow claim</span>
+        <span class="cf-code" style="display:inline-block;padding:3px 8px;font-size:12px">metadata_category</span>
+        <p style="font-size:13px;color:color-mix(in srgb, var(--color-text) 60%, transparent);margin:12px 0 0">What the folder, sender, tag, or upstream system claims the document is. This may be wrong.</p>
+      </div>
+      <div style="background:var(--color-bg);padding:22px;border-left:2px solid var(--color-accent-700)">
+        <span style="font-family:var(--font-heading);font-weight:700;font-size:14px;display:block;margin-bottom:6px;color:var(--color-accent-700)">Model Prediction</span>
+        <span style="font-size:12px;color:color-mix(in srgb, var(--color-text) 55%, transparent);display:block;margin-bottom:10px">Classifier inference</span>
+        <span class="cf-code" style="display:inline-block;padding:3px 8px;font-size:12px">top_class</span>
+        <p style="font-size:13px;color:color-mix(in srgb, var(--color-text) 60%, transparent);margin:12px 0 0">What the ML pipeline predicts after reading the document content.</p>
+      </div>
+    </div>
+    <div class="cf-flow-row" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:16px">
+      <div class="cf-screen" style="padding:14px 18px">metadata_category ↔ top_class</div><span class="cf-arrow">→</span>
+      <div class="cf-screen" style="padding:14px 18px">confidence + prediction margin</div><span class="cf-arrow">→</span>
+      <div class="cf-screen" style="padding:14px 18px;border-color:var(--color-accent-700)">Routing Gate</div><span class="cf-arrow">→</span>
+      <div class="cf-screen" style="padding:14px 18px">continue / review</div>
+    </div>
+    <p style="font-size:14px;color:color-mix(in srgb, var(--color-text) 65%, transparent);max-width:64ch;margin:0">The live system compares what it was told against what the model inferred, then uses deterministic checks to decide whether the document can progress.</p>
+  </section>
+
+  <hr class="hr" style="margin:0">
+
+  <!-- 03 ML CLASSIFICATION -->
+  <section id="spec-03" class="cf-wrap" style="padding:80px 0">
+    <span style="display:block;font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:14px">03 — ML Classification</span>
+    <div class="cf-code" style="margin-bottom:24px">Pipeline([
+    ("tfidf", TfidfVectorizer(ngram_range=(1,2), sublinear_tf=True)),
+    ("clf", LogisticRegression(max_iter=1000, random_state=42)),
+])</div>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:24px">
+      <span class="tag tag-outline">Unigrams + bigrams</span><span class="tag tag-outline">Sparse TF-IDF representation</span><span class="tag tag-outline">Probability output</span><span class="tag tag-outline">Lightweight, interpretable</span>
+    </div>
+    <p style="font-size:14px;color:color-mix(in srgb, var(--color-text) 65%, transparent);max-width:60ch;margin:0 0 20px">classes_ and predict_proba() are zipped into a semantic probability dictionary, so downstream code reads by class name rather than a brittle numerical index:</p>
+    <div class="cf-code">classes = pipeline.classes_.tolist()
+probs = pipeline.predict_proba([text])[0]
+
+return dict(zip(classes, probs))
+→ {"Financial": 0.91, "Operational": 0.09}</div>
+  </section>
+
+  <hr class="hr" style="margin:0">
+
+  <!-- 04 DECISION GATE -->
+  <section id="spec-04" class="cf-wrap" style="padding:80px 0">
+    <span style="display:block;font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:14px">04 — Decision Gate</span>
+    <div class="cf-grid2" style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--color-divider);margin-bottom:24px">
+      <div style="background:var(--color-bg);padding:22px">
+        <span style="font-family:var(--font-heading);font-weight:700;font-size:14px;display:block;margin-bottom:8px">Top-class confidence</span>
+        <span class="cf-code" style="font-size:12px;padding:8px 10px">p₁ ≥ threshold</span>
+      </div>
+      <div style="background:var(--color-bg);padding:22px">
+        <span style="font-family:var(--font-heading);font-weight:700;font-size:14px;display:block;margin-bottom:8px">Top-vs-runner-up margin</span>
+        <span class="cf-code" style="font-size:12px;padding:8px 10px">p₁ − p₂ ≥ margin</span>
+      </div>
+      <div style="background:var(--color-bg);padding:22px">
+        <span style="font-family:var(--font-heading);font-weight:700;font-size:14px;display:block;margin-bottom:8px">Metadata agreement</span>
+        <span class="cf-code" style="font-size:12px;padding:8px 10px">predicted == metadata</span>
+      </div>
+    </div>
+    <div class="cf-screen" style="max-width:460px;padding:18px 22px;margin-bottom:24px">
+      <span style="font-family:var(--font-heading);font-weight:700;font-size:16px">PASS = Confidence ∧ Margin ∧ Metadata Agreement</span>
+    </div>
+    <p style="font-size:13px;color:color-mix(in srgb, var(--color-text) 55%, transparent);max-width:60ch;margin:0 0 20px">Confidence and margin thresholds are configurable, defaulting to approximately 0.70 and 0.20.</p>
+    <p style="font-size:14px;color:color-mix(in srgb, var(--color-text) 65%, transparent);max-width:60ch;margin:0 0 16px">The gate is non-short-circuiting: every check runs, and all failures are collected rather than stopping at the first.</p>
+    <div class="cf-code">failures = []
+if p1 &lt; min_confidence:
+    failures.append("LOW_CONFIDENCE")
+if margin &lt; min_margin:
+    failures.append("SMALL_PREDICTION_MARGIN")
+if not metadata_match:
+    failures.append("METADATA_CONFLICT")</div>
+
+    <span style="display:block;font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent);margin:32px 0 12px">Document state</span>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+      <span class="tag tag-neutral">CLASSIFICATION_PENDING</span><span class="cf-arrow" style="font-size:13px">→</span>
+      <span class="tag tag-neutral">CLASSIFIED</span><span class="cf-arrow" style="font-size:13px">→</span>
+      <span class="tag tag-neutral">POLICY_BOUND</span><span class="cf-arrow" style="font-size:13px">→</span>
+      <span class="tag tag-neutral">ENCRYPTED</span><span class="cf-arrow" style="font-size:13px">→</span>
+      <span class="tag tag-neutral">ROUTED</span>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px">
+      <span class="tag tag-outline">CLASSIFICATION_PENDING</span><span class="cf-arrow" style="font-size:13px">→</span>
+      <span class="tag tag-outline">REVIEW / QUARANTINED</span>
+    </div>
+  </section>
+
+  <hr class="hr" style="margin:0">
+
+  <!-- 05 PROTECTION & ACCESS -->
+  <section id="spec-05" class="cf-wrap" style="padding:80px 0">
+    <span style="display:block;font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:14px">05 — Protection &amp; Access</span>
+
+    <span style="display:block;font-family:var(--font-heading);font-weight:700;font-size:15px;margin-bottom:16px">1. What permissions does this document carry?</span>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:36px;padding:18px 20px;background:var(--color-surface)">
+      <span style="font-size:14px;font-weight:700">Financial</span><span class="cf-arrow" style="font-size:14px">→</span>
+      <span class="cf-code" style="padding:2px 8px;font-size:12px">FIN_CONF_01</span><span class="cf-arrow" style="font-size:14px">→</span>
+      <span style="font-size:14px;font-weight:700;color:var(--color-accent-700)">Finance + Compliance</span>
+    </div>
+
+    <div class="hr" style="margin-bottom:36px"></div>
+
+    <span style="display:block;font-family:var(--font-heading);font-weight:700;font-size:15px;margin-bottom:16px">2. Does this user intersect with those permissions?</span>
+
+    <div class="cf-grid2" style="display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--color-divider);margin-bottom:2px">
+      <div style="background:var(--color-bg);padding:22px">
+        <span style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent);display:block;margin-bottom:8px">Document policy</span>
+        <span style="font-family:var(--font-heading);font-weight:700;font-size:15px">FIN_CONF_01 → {Finance, Compliance}</span>
+      </div>
+      <div style="background:var(--color-bg);padding:22px">
+        <span style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent);display:block;margin-bottom:8px">User</span>
+        <span class="cf-code" style="display:inline-block;padding:3px 8px;font-size:12px;margin-bottom:8px">operations_manager</span>
+        <span style="font-family:var(--font-heading);font-weight:700;font-size:15px;display:block">→ {Operations}</span>
+      </div>
+    </div>
+    <div style="background:var(--color-text);padding:22px;margin-bottom:24px">
+      <span style="font-family:var(--font-heading);font-weight:700;font-size:16px;color:var(--color-bg)">{Finance, Compliance} ∩ {Operations} = ∅</span>
+      <p style="font-family:var(--font-heading);font-weight:800;font-size:16px;color:var(--color-accent-400);margin:10px 0 0">→ Access denied</p>
+    </div>
+
+    <div class="cf-grid2" style="display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--color-divider);margin-bottom:2px">
+      <div style="background:var(--color-bg);padding:22px">
+        <span style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent);display:block;margin-bottom:8px">Document policy</span>
+        <span style="font-family:var(--font-heading);font-weight:700;font-size:15px">FIN_CONF_01 → {Finance, Compliance}</span>
+      </div>
+      <div style="background:var(--color-bg);padding:22px">
+        <span style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent);display:block;margin-bottom:8px">User</span>
+        <span class="cf-code" style="display:inline-block;padding:3px 8px;font-size:12px;margin-bottom:8px">auditor</span>
+        <span style="font-family:var(--font-heading);font-weight:700;font-size:15px;display:block">→ {Compliance}</span>
+      </div>
+    </div>
+    <div style="background:var(--color-bg);border:2px solid var(--color-accent-700);padding:22px;margin-bottom:32px">
+      <span style="font-family:var(--font-heading);font-weight:700;font-size:16px">{Finance, Compliance} ∩ {Compliance} = {Compliance}</span>
+      <p style="font-family:var(--font-heading);font-weight:800;font-size:16px;color:var(--color-accent-700);margin:10px 0 0">→ Access granted</p>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+      <span style="font-size:13px;font-weight:700">If access is granted</span><span class="cf-arrow" style="font-size:14px">→</span>
+      <span class="cf-code" style="padding:2px 8px;font-size:12px">Fernet.decrypt()</span>
+      <span style="color:color-mix(in srgb, var(--color-text) 30%, transparent);margin:0 4px">·</span>
+      <span style="font-size:13px;font-weight:700">If decryption fails</span><span class="cf-arrow" style="font-size:14px">→</span>
+      <span class="cf-code" style="padding:2px 8px;font-size:12px">DECRYPT_FAILED</span>
+    </div>
+  </section>
+
+  <hr class="hr" style="margin:0">
+
+  <!-- 06 FAILURE SCENARIOS -->
+  <section id="spec-06" class="cf-wrap" style="padding:80px 0">
+    <span style="display:block;font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:14px">06 — Failure Scenarios</span>
+    <div style="display:flex;flex-wrap:wrap;gap:0;border-bottom:2px solid var(--color-text);margin-bottom:28px">
+      <sc-for list="{{ scenarioTabs }}" as="t" hint-placeholder-count="4">
+        <button style="{{ t.style }}" onClick="{{ t.onClick }}">{{ t.label }}</button>
+      </sc-for>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px">
+      <sc-for list="{{ activeScenario.flow }}" as="f" hint-placeholder-count="9">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="{{ f.style }}">{{ f.label }}</div>
+          <sc-if value="{{ f.hasArrow }}" hint-placeholder-val="{{ true }}"><span class="cf-arrow" style="font-size:14px">→</span></sc-if>
+        </div>
+      </sc-for>
+    </div>
+    <p style="font-size:14px;color:color-mix(in srgb, var(--color-text) 65%, transparent);max-width:60ch;margin:0">{{ activeScenario.desc }}</p>
+  </section>
+
+  <hr class="hr" style="margin:0">
+
+  <!-- 07 AUDITABILITY -->
+  <section id="spec-07" class="cf-wrap" style="padding:80px 0">
+    <span style="display:block;font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:14px">07 — Auditability</span>
+    <p style="font-size:14px;color:color-mix(in srgb, var(--color-text) 65%, transparent);max-width:60ch;margin:0 0 24px">Structured, machine-readable audit events rather than decorative console output.</p>
+    <div class="cf-grid2" style="display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--color-divider)">
+      <div style="background:var(--color-bg);padding:22px">
+        <div class="cf-code" style="font-size:12px">{
+  "timestamp": "...",
+  "doc_id": "d-1042",
+  "role": "finance_analyst",
+  "status": "DENIED",
+  "detail": "role not permitted"
+}</div>
+      </div>
+      <div style="background:var(--color-bg);padding:22px">
+        <div class="cf-code" style="font-size:12px">{
+  "timestamp": "...",
+  "doc_id": "d-1042",
+  "role": "finance_analyst",
+  "status": "DECRYPT_FAILED",
+  "detail": "invalid token"
+}</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="hr" style="margin:0">
+
+  <!-- 08 VALIDATION LOOP -->
+  <section id="spec-08" class="cf-wrap" style="padding:80px 0 120px">
+    <span style="display:block;font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:14px">08 — Validation Loop</span>
+    <p style="font-size:14px;color:color-mix(in srgb, var(--color-text) 65%, transparent);max-width:60ch;margin:0 0 28px">Routing decisions create human-verified labels, and those labels are used to improve both the model and the decision threshold.</p>
+
+    <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-bottom:2px">
+      <div class="cf-screen" style="padding:14px 18px">Incoming document</div><span class="cf-arrow">→</span>
+      <div class="cf-screen" style="padding:14px 18px;border-color:var(--color-accent-700)">Routing Gate</div>
+    </div>
+    <div class="cf-grid2" style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--color-divider);margin-bottom:2px;margin-top:2px">
+      <div style="background:var(--color-bg);padding:18px">
+        <span style="font-size:13px;color:color-mix(in srgb, var(--color-text) 65%, transparent)">Approved</span>
+        <p style="font-family:var(--font-heading);font-weight:700;font-size:14px;margin:8px 0 0">Route normally → small random sample sent to audit</p>
+      </div>
+      <div style="background:var(--color-bg);padding:18px">
+        <span style="font-size:13px;color:color-mix(in srgb, var(--color-text) 65%, transparent)">Mismatch</span>
+        <p style="font-family:var(--font-heading);font-weight:700;font-size:14px;margin:8px 0 0;color:var(--color-accent-700)">Human review</p>
+      </div>
+      <div style="background:var(--color-bg);padding:18px">
+        <span style="font-size:13px;color:color-mix(in srgb, var(--color-text) 65%, transparent)">Low confidence</span>
+        <p style="font-family:var(--font-heading);font-weight:700;font-size:14px;margin:8px 0 0;color:var(--color-accent-700)">Human review</p>
+      </div>
+    </div>
+    <div class="cf-flow-row" style="display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:2px;margin-bottom:24px;text-align:center">
+      <div class="cf-screen" style="padding:14px 18px;border-color:var(--color-accent-700)">Human review</div><span class="cf-arrow">→</span>
+      <div class="cf-screen" style="padding:14px 18px">Verified true_label</div><span class="cf-arrow">→</span>
+      <div class="cf-screen" style="padding:14px 18px">Validation dataset</div>
+    </div>
+
+    <div class="cf-grid2" style="display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--color-divider)">
+      <div style="background:var(--color-bg);padding:20px;display:flex;flex-direction:column">
+        <span style="font-family:var(--font-heading);font-weight:700;font-size:14px;display:block;margin-bottom:8px">1. Retrain the model</span>
+        <p style="font-size:13px;color:color-mix(in srgb, var(--color-text) 60%, transparent);margin:0">Add newly verified examples and refit the classifier.</p>
+      </div>
+      <div style="background:var(--color-bg);padding:20px;display:flex;flex-direction:column">
+        <span style="font-family:var(--font-heading);font-weight:700;font-size:14px;display:block;margin-bottom:8px">2. Recalibrate the threshold</span>
+        <p style="font-size:13px;color:color-mix(in srgb, var(--color-text) 60%, transparent);margin:0 0 16px">Measure model errors and adjust the confidence threshold to balance automation against human review.</p>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;font-family:var(--font-heading);font-weight:700;font-size:13px;margin-top:auto">
+          <span>Higher threshold</span><span class="cf-arrow" style="font-size:14px">←</span><span style="color:color-mix(in srgb, var(--color-text) 55%, transparent);font-weight:600">more human review</span>
+          <span style="color:color-mix(in srgb, var(--color-text) 30%, transparent)">|</span>
+          <span style="color:color-mix(in srgb, var(--color-text) 55%, transparent);font-weight:600">more automation</span><span class="cf-arrow" style="font-size:14px">→</span><span>Lower threshold</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  </div>
+  </sc-if>
+
+  <div class="cf-wrap" style="padding:40px 0 64px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;border-top:2px solid var(--color-text)">
+    <a href="index.html" style="font-family:var(--font-heading);font-weight:600;font-size:13px;color:var(--color-text);text-decoration:none">← Portfolio</a>
+    <a href="Joby.dc.html" style="font-family:var(--font-heading);font-weight:600;font-size:13px;color:var(--color-text);text-decoration:none">Next project →</a>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { view: 'case', scenario: 'valid', activeSpec: null };
+
+  SCENARIOS = {
+    valid: {
+      label: 'A — Valid',
+      stopAt: -1,
+      desc: 'High-confidence classification and matching metadata clear the gate; encryption succeeds; the requesting role is authorised. Full pipeline completes.',
+    },
+    ambiguous: {
+      label: 'B — Ambiguous',
+      stopAt: 1,
+      desc: 'Low confidence and a narrow prediction margin fail the gate. The document is rejected before encryption and becomes a quarantine candidate.',
+    },
+    conflict: {
+      label: 'C — Metadata Conflict',
+      stopAt: 1,
+      desc: 'Content predicts one category while metadata claims another. Metadata agreement fails the gate; the document is rejected.',
+    },
+    unauthorised: {
+      label: 'D — Unauthorised',
+      stopAt: 3,
+      desc: 'Classification gate passes and encryption succeeds, but the requesting role is not permitted. Access is denied and the document stays encrypted.',
+    },
+  };
+
+  RUNTIME_FLOW = ['Document', 'ML classification', 'Probability mapping', 'Routing gate', 'Reject / continue', 'Fernet encryption', 'Role-based access check', 'Decrypt / deny', 'Audit'];
+
+  renderVals() {
+    const view = this.state.view;
+    const setView = (v) => () => this.setState({ view: v });
+    const activeStyle = 'font-family:var(--font-heading);font-weight:700;font-size:14px;padding:16px 24px;background:var(--color-text);color:var(--color-bg);border:none;cursor:pointer';
+    const inactiveStyle = 'font-family:var(--font-heading);font-weight:700;font-size:14px;padding:16px 24px;background:transparent;color:var(--color-text);border:none;cursor:pointer';
+
+    const scenarioKey = this.state.scenario;
+    const scenario = this.SCENARIOS[scenarioKey];
+    const scenarioTabs = Object.keys(this.SCENARIOS).map((key) => ({
+      label: this.SCENARIOS[key].label,
+      style: key === scenarioKey
+        ? 'font-family:var(--font-heading);font-weight:700;font-size:13px;padding:12px 18px;background:var(--color-accent-700);color:var(--color-bg);border:none;cursor:pointer'
+        : 'font-family:var(--font-heading);font-weight:700;font-size:13px;padding:12px 18px;background:transparent;color:var(--color-text);border:none;cursor:pointer',
+      onClick: () => this.setState({ scenario: key }),
+    }));
+    const activeScenario = {
+      desc: scenario.desc,
+      flow: this.RUNTIME_FLOW.map((label, i, arr) => {
+        const stopped = scenario.stopAt >= 0 && i > scenario.stopAt;
+        const isStopPoint = i === scenario.stopAt;
+        return {
+          label,
+          hasArrow: i < arr.length - 1,
+          style: `border:2px solid ${isStopPoint ? 'var(--color-accent-700)' : 'var(--color-text)'};background:${stopped ? 'var(--color-surface)' : 'var(--color-bg)'};color:${stopped ? 'color-mix(in srgb, var(--color-text) 40%, transparent)' : 'var(--color-text)'};padding:10px 14px;font-size:12.5px;box-shadow:${stopped ? 'none' : 'var(--shadow-md)'}`,
+        };
+      }),
+    };
+
+    return {
+      isCaseStudy: view === 'case',
+      isTechSpecs: view === 'tech',
+      tabStyle: {
+        caseStudy: view === 'case' ? activeStyle : inactiveStyle,
+        techSpecs: view === 'tech' ? activeStyle : inactiveStyle,
+      },
+      setView: { caseStudy: setView('case'), techSpecs: setView('tech') },
+      specIndex: ['01 Pipeline', '02 Document Model', '03 ML Classification', '04 Decision Gate', '05 Protection & Access', '06 Failure Scenarios', '07 Auditability', '08 Validation Loop']
+        .map((label, i) => ({
+          label,
+          style: `font-family:var(--font-heading);font-weight:700;font-size:13px;letter-spacing:0.04em;background:none;border:none;padding:0;cursor:pointer;color:${this.state.activeSpec === i ? 'var(--color-accent-700)' : 'color-mix(in srgb, var(--color-text) 60%, transparent)'}`,
+          onClick: () => {
+            this.setState({ activeSpec: i });
+            const el = document.getElementById(`spec-0${i + 1}`);
+            if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 68, behavior: 'smooth' });
+          },
+        })),
+      runtimeFlow: this.RUNTIME_FLOW.map((label, i, arr) => ({ label, hasArrow: i < arr.length - 1 })),
+      accessFlow: ['Document classification', 'Permitted departments', 'User role', 'User departments', 'Intersection', 'Grant / deny']
+        .map((label, i, arr) => ({ label, hasArrow: i < arr.length - 1 })),
+      scenarioTabs,
+      activeScenario,
+      stateFields: ['Predicted category', 'Top confidence', 'Runner-up category', 'Prediction margin', 'Metadata agreement', 'Security policy', 'Encryption state', 'Workflow state', 'Access state'],
+      lifecycleStates: ['INGESTED', 'CONTENT EXTRACTED', 'CLASSIFICATION PENDING', 'CLASSIFIED', 'POLICY BOUND', 'ENCRYPTED', 'ROUTED', 'ACCESS REQUESTED', 'DECRYPT AUTHORISED', 'TEMPORARILY DECRYPTED', 'PROTECTED']
+        .map((name, i, arr) => ({ name, hasArrow: i < arr.length - 1 })),
+      successPath: ['Ingest', 'Extract evidence', 'Classify: Financial', 'Confidence clears gate', 'Bind Financial protection policy', 'Encrypt', 'Route', 'Finance analyst requests access', 'Role + policy + encryption + key checked', 'Temporary authorised access, protected state restored']
+        .map((label, i) => ({ n: String(i + 1).padStart(2, '0'), label })),
+      failurePath: ['Automatic transition blocked', 'Classification review', 'Quarantine', 'Access remains closed', 'Human review', 'Confirmed policy', 'Protected workflow resumes'],
+      safeFailures: [
+        { cause: 'Classification uncertain', effect: 'Quarantine' },
+        { cause: 'Policy missing', effect: 'Block transition' },
+        { cause: 'Role invalid', effect: 'Deny access' },
+        { cause: 'Key unresolved', effect: 'Remain encrypted' },
+        { cause: 'Encryption failure', effect: 'Do not route' },
+      ],
+      auditEvents: ['Document ingested', 'Classification produced', 'Confidence recorded', 'Conflict detected', 'Transition attempted', 'Policy bound', 'Encryption result', 'Routing event', 'Access request', 'Access decision', 'Failure reason', 'Human correction'],
+      loopSteps: [
+        { name: '1. Receive', desc: 'Document enters existing workflow.' },
+        { name: '2. Interpret', desc: 'Content and context are evaluated.' },
+        { name: '3. Estimate', desc: 'Category and uncertainty are produced.' },
+        { name: '4. Gate', desc: 'Evidence determines whether progression is safe.' },
+        { name: '5. Protect', desc: 'Security policy and encryption are applied.' },
+        { name: '6. Route', desc: 'Existing enterprise workflow continues.' },
+        { name: '7. Authorise', desc: 'Access request is checked deterministically.' },
+        { name: '8. Audit', desc: 'Every transition becomes traceable history.' },
+      ],
+      archLayers: [
+        { name: 'Interpretation Layer', desc: 'What does this document appear to be?' },
+        { name: 'Uncertainty Layer', desc: 'How strongly does the evidence support that interpretation?' },
+        { name: 'Policy Layer', desc: 'What security conditions follow from that state?' },
+        { name: 'Transition Layer', desc: 'Is the next action actually permitted?' },
+      ],
+      archFlow: ['Document', 'Interpretation', 'Confidence', 'Policy', 'Transition', 'Audit'].map((label, i) => ({ label, hasArrow: i < 5 })),
+      principles: [
+        { title: 'Model output does not grant access.', body: 'Classification produces a category and a confidence score; policy binding, encryption, and access decisions are made by deterministic code.' },
+        { title: 'Uncertain classifications stop at the gate.', body: 'Low-confidence or conflicting classifications are diverted to review instead of progressing automatically.' },
+        { title: 'Every security transition is traceable.', body: 'Each state change, gate decision, and access request is logged with its outcome and reason.' },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

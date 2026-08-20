@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Adil Rasheed — Portfolio</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<template id="__bundler_thumbnail">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" fill="#f3f2f2"/><text x="30" y="115" font-family="Georgia,serif" font-size="48" fill="#8a1f11">AR</text></svg>
+</template>
+<helmet>
+<link rel="stylesheet" href="_ds/modernist-13ec4272-7ce8-4ae4-9e5b-5b6bf80f3f12/styles.css">
+<script src="_ds/modernist-13ec4272-7ce8-4ae4-9e5b-5b6bf80f3f12/_ds_bundle.js"></script>
+<script src="./image-slot.js"></script>
+<style>
+a{text-decoration:none}
+.pf-cursor-dot{position:fixed;top:0;left:0;width:9px;height:9px;border-radius:50%;background:var(--color-accent-700);pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width 0.15s ease,height 0.15s ease,opacity 0.15s ease;opacity:0.55}
+.pf-cursor-dot.pf-cursor-hover{width:15px;height:15px;opacity:0.85}
+.pf-cursor-dot.pf-cursor-strong{width:26px;height:26px;opacity:0.95}
+@media (hover:none),(pointer:coarse){.pf-cursor-dot{display:none}}
+.pf-cursor-trail{position:fixed;inset:0;pointer-events:none;z-index:9998}
+@media (hover:none),(pointer:coarse){.pf-cursor-trail{display:none}}
+</style>
+<script>
+(function(){
+  function init(){
+    var dot=document.createElement('div');
+    dot.className='pf-cursor-dot';
+    document.body.appendChild(dot);
+    document.addEventListener('mousemove',function(e){dot.style.left=e.clientX+'px';dot.style.top=e.clientY+'px';});
+    document.addEventListener('mouseover',function(e){
+      var strong=e.target.closest('a,button,.btn');
+      var soft=strong||e.target.closest('[role="button"],.tag,input,select,textarea');
+      dot.classList.toggle('pf-cursor-strong',!!strong);
+      dot.classList.toggle('pf-cursor-hover',!!soft&&!strong);
+    });
+    document.addEventListener('mouseout',function(e){
+      if(e.target.closest('a,button,.btn,[role="button"],.tag,input,select,textarea')){
+        dot.classList.remove('pf-cursor-hover');
+        dot.classList.remove('pf-cursor-strong');
+      }
+    });
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches||window.matchMedia('(hover: none), (pointer: coarse)').matches)return;
+    var canvas=document.createElement('canvas');
+    canvas.className='pf-cursor-trail';
+    document.body.appendChild(canvas);
+    var ctx=canvas.getContext('2d');
+    function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+    resize();
+    window.addEventListener('resize',resize);
+    var accent=getComputedStyle(document.documentElement).getPropertyValue('--color-accent-700').trim()||'#8a1f11';
+    var mx=null,my=null,tx=null,ty=null;
+    var tmr=null;
+    document.addEventListener('mousemove',function(e){
+      tx=e.clientX;ty=e.clientY;if(mx===null){mx=tx;my=ty;}
+      if(tmr)clearTimeout(tmr);
+      tmr=setTimeout(function(){ctx.clearRect(0,0,canvas.width,canvas.height);tx=null;mx=null;},220);
+    });
+    function frame(){
+      if(tx!==null){
+        var dx=tx-mx,dy=ty-my;
+        var dist=Math.sqrt(dx*dx+dy*dy);
+        mx+=dx*0.3;my+=dy*0.3;
+        ctx.globalCompositeOperation='destination-out';
+        ctx.fillStyle='rgba(0,0,0,0.26)';
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+        ctx.globalCompositeOperation='source-over';
+        ctx.strokeStyle=accent;
+        ctx.globalAlpha=Math.min(0.32,0.16+dist*0.006);
+        ctx.lineWidth=Math.min(3.5,1.4+dist*0.06);
+        ctx.lineCap='round';
+        ctx.beginPath();
+        ctx.moveTo(mx-dx*0.3,my-dy*0.3);
+        ctx.lineTo(mx,my);
+        ctx.stroke();
+        ctx.globalAlpha=1;
+      }
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init);}else{init();}
+})();
+</script>
+</helmet>
+
+<div style="font-family:var(--font-body);background:var(--color-bg);color:var(--color-text);min-height:100vh">
+
+  <nav class="nav" style="{{ navStyle }}">
+    <span class="nav-brand">Adil Rasheed</span>
+    <a href="#about">About</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
+    <a href="#contact" class="btn btn-primary" style="margin-left:var(--space-2)">Get in touch</a>
+  </nav>
+
+  <div style="max-width:1200px;margin:0 auto;padding:0 clamp(20px,5vw,72px)">
+
+    <section style="padding: 112px 0 88px; width: 1026px; height: 357px" id="top">
+      <span style="display:block;font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:18px">Software Engineer — Aspiring Founder</span>
+      <h1 style="font-family:var(--font-heading);font-weight:var(--font-heading-weight);font-size:clamp(42px,6vw,80px);line-height:1.05;letter-spacing:-0.02em;margin:0 0 28px;max-width:16ch">Trying to make a difference.</h1>
+      
+      <div style="display:flex;gap:var(--space-3);flex-wrap:wrap">
+        <a href="#projects" class="btn btn-primary">See the work</a>
+        <a href="#contact" class="btn btn-ghost">Get in touch</a>
+      </div>
+    </section>
+
+    <section id="about" style="{{ aboutGridStyle }}" ref="{{ setAboutRef }}">
+      <div>
+        <h2 style="{{ aboutFade.heading }}">About me.</h2><div style="{{ aboutFade.body }}"><p class="isSelectedEnd">I'm Adil Rasheed, a Computer Science and AI student who likes understanding how things work then building things from that understanding. I’m especially drawn to problems where technology, people, and complex systems overlap.</p><p class="isSelectedEnd">I spend most of my time moving between learning and making. That might mean studying AI or software architecture, exploring ideas around cognition and decision-making, or turning a problem I’ve noticed into a product, prototype, or experiment.</p><p>Long term, I want to build ambitious technology that meaningfully changes how people live and work. Along the way, I’m trying to become better at understanding both sides of that equation: the systems we build, and the humans they are built for.</p></div>
+
+        <span style="display:block;font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:16px">Stack</span>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:40px">
+          <sc-for list="{{ skills }}" as="skill" hint-placeholder-count="7">
+            <span class="tag tag-neutral" style="border:1px solid var(--color-divider);white-space:nowrap">{{ skill }}</span>
+          </sc-for>
+        </div>
+
+        <span style="display:block;font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:16px">Current interest</span>
+        <h3 style="font-family:var(--font-heading);font-weight:var(--font-heading-weight);font-size:24px;line-height:1.2;letter-spacing:-0.01em;margin:0 0 20px">Where the human ends and the AI begins.</h3>
+        <p style="font-size:16px;line-height:1.65;color:rgba(32,30,29,0.78);margin:0 0 16px;max-width:56ch">I'm interested in the boundary between human intelligence and artificial intelligence. As AI becomes increasingly capable for acting on our behalf, I think one of the most important questions becomes: <strong>where should the human end and the AI begin?</strong></p>
+        <p style="font-size:16px;line-height:1.65;color:rgba(32,30,29,0.78);margin:0 0 16px;max-width:56ch">Right now, I'm particularly interested in systems where AI expands human capability without quietly replacing human agency. The machine can explore possibility spaces, surface patterns, and reduce the cost of execution. But deciding what matters, what to believe and what risks are worth taking should remain fundamentally human.</p>
+        <p style="font-size:16px;line-height:1.65;color:rgba(32,30,29,0.78);margin:0 0 16px;max-width:56ch">I'm also fascinated by what happens as this boundary moves beyond software and into the physical world: systems that can understand environments, retain experience, and help humans make increasingly complex decisions.</p>
+        <p style="font-size:16px;line-height:1.65;color:rgba(32,30,29,0.78);margin:0;max-width:56ch">The future I find most interesting is therefore neither fully human nor fully autonomous, but one in which we become much more precise about the comparative advantage of each. AI should expand the field a human can perceive and act upon. The human should remain responsible for choosing where to go.</p>
+      </div>
+
+    </section>
+
+    <hr class="hr" style="margin:0">
+
+    <section id="projects" style="padding: 56px 0 72px" ref="{{ setProjectsRef }}">
+      <h2 style="{{ projectsFade.eyebrow }}">Selected work</h2>
+
+      <div style="{{ projectsFade.content }}">
+      <sc-for list="{{ projects }}" as="p" hint-placeholder-count="3">
+        <div style="{{ p.rowStyle }}">
+          <sc-if value="{{ p.badge }}" hint-placeholder-val="{{ false }}">
+            <span style="position: absolute; top: 50%; transform: translateY(-50%); font-family: 'Brush Script MT','Segoe Script',cursive; font-size: 26px; color: var(--color-accent); white-space: nowrap; display: flex; align-items: center; gap: 8px; left: -149px"> {{ p.badge }}</span>
+          </sc-if>
+          <p style="font-family:var(--font-heading);font-weight:var(--font-heading-weight);font-size:15px;color:var(--color-text);margin:0">{{ p.num }}</p>
+          <div>
+            <h3 style="font-family:var(--font-heading);font-weight:var(--font-heading-weight);font-size:22px;letter-spacing:-0.01em;margin:0 0 10px">{{ p.title }}</h3>
+            <p style="font-size:15px;line-height:1.6;color:color-mix(in srgb, var(--color-text) 78%, transparent);margin:0 0 12px;max-width:52ch">{{ p.desc }}</p>
+            <div style="display:flex;flex-wrap:wrap;gap:8px">
+              <sc-for list="{{ p.tags }}" as="tag" hint-placeholder-count="3">
+                <span class="tag tag-accent">{{ tag }}</span>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;align-self:start">
+            <span style="font-family: var(--font-body); font-style: normal; font-size: 19px;line-height:1">→</span>
+            <a href="{{ p.link }}" class="btn btn-ghost" style="padding:0;color:var(--color-text);white-space:nowrap;display:flex;align-items:center;gap:6px">
+              View
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>
+            </a>
+          </div>
+        </div>
+      </sc-for>
+      </div>
+    </section><hr class="hr" style="margin:0">
+
+  </div><section id="contact" style="background:var(--color-accent);color:var(--color-bg)">
+    <div style="max-width:1200px;margin:0 auto;padding:96px clamp(20px,5vw,72px)">
+      <span style="display:block;font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-bg);opacity:0.8;margin-bottom:20px">Contact</span>
+      <h2 style="font-family:var(--font-heading);font-weight:var(--font-heading-weight);font-size:clamp(32px,4.5vw,52px);line-height:1.1;letter-spacing:-0.015em;margin:0 0 28px;max-width:18ch">Let's Innovate.<br></h2>
+      <a href="mailto:adil.rasheed2006@gmail.com" style="display:inline-flex;align-items:center;gap:10px;font-family:var(--font-heading);font-weight:var(--font-heading-weight);font-size:22px;color:var(--color-bg);margin-bottom:36px">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+        adil.rasheed2006@gmail.com
+      </a>
+      <div style="display:flex;gap:24px;flex-wrap:wrap">
+        <sc-for list="{{ socials }}" as="s" hint-placeholder-count="2">
+          <a href="{{ s.href }}" class="btn btn-ghost" style="color:var(--color-bg);border:1px solid color-mix(in srgb, var(--color-bg) 50%, transparent);padding:10px 16px">
+            <span dangerouslySetInnerHTML="{{ s.icon }}"></span>
+            {{ s.label }}
+          </a>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <div style="max-width:1200px;margin:0 auto;padding:24px clamp(20px,5vw,72px);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
+    <p style="font-size:13px;color:color-mix(in srgb, var(--color-text) 70%, transparent);margin:0">© 2026 Adil Rasheed</p>
+    <p style="font-size:13px;color:color-mix(in srgb, var(--color-text) 70%, transparent);margin:0">Build with intention.</p>
+  </div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{},&quot;navSticky&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;projectsLayout&quot;:{&quot;editor&quot;:null,&quot;default&quot;:&quot;rows&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = { aboutVisible: false, projectsVisible: false };
+
+  componentDidMount() {
+    const opts = { threshold: 0.15 };
+    this.observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        if (entry.target === this.aboutEl && !this.state.aboutVisible) this.setState({ aboutVisible: true });
+        if (entry.target === this.projectsEl && !this.state.projectsVisible) this.setState({ projectsVisible: true });
+      });
+    }, opts);
+    if (this.aboutEl) this.observer.observe(this.aboutEl);
+    if (this.projectsEl) this.observer.observe(this.projectsEl);
+  }
+
+  componentWillUnmount() {
+    if (this.observer) this.observer.disconnect();
+  }
+
+  setAboutRef = (el) => { this.aboutEl = el; if (el && this.observer) this.observer.observe(el); };
+  setProjectsRef = (el) => { this.projectsEl = el; if (el && this.observer) this.observer.observe(el); };
+
+  fadeStyle(visible, delayMs) {
+    return {
+      opacity: visible ? 1 : 0,
+      transform: visible ? 'translateY(0)' : 'translateY(14px)',
+      transition: `opacity 500ms ease-out ${delayMs}ms, transform 500ms ease-out ${delayMs}ms`,
+    };
+  }
+
+  renderVals() {
+    const navSticky = this.props.navSticky ?? true;
+    const projectsLayout = this.props.projectsLayout ?? 'rows';
+    const showAboutPhoto = this.props.showAboutPhoto ?? false;
+
+    const navStyle = {
+      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      padding: '20px clamp(20px,5vw,72px)', borderBottom: '2px solid var(--color-divider)',
+      background: 'var(--color-bg)', position: navSticky ? 'sticky' : 'static', top: 0, zIndex: 10,
+    };
+
+    const aboutGridStyle = {
+      display: 'grid',
+      gridTemplateColumns: showAboutPhoto ? 'minmax(0,7fr) minmax(0,5fr)' : '1fr',
+      gap: '48px', alignItems: 'start', padding: '64px 0 56px',
+    };
+
+    const aboutV = this.state.aboutVisible;
+    const aboutFade = {
+      heading: { fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-heading-weight)', fontSize: '32px', lineHeight: 1.15, letterSpacing: '-0.015em', margin: '0 0 20px', ...this.fadeStyle(aboutV, 0) },
+      body: { fontSize: '16px', lineHeight: 1.65, color: 'rgba(32,30,29,0.78)', margin: '0 0 16px', maxWidth: '56ch', ...this.fadeStyle(aboutV, 150) },
+      image: { margin: 0, display: 'flex', justifyContent: 'center', position: 'sticky', top: '100px', ...this.fadeStyle(aboutV, 220) },
+    };
+
+    const projectsV = this.state.projectsVisible;
+    const projectsFade = {
+      eyebrow: { fontFamily: 'var(--font-heading)', fontWeight: 'var(--font-heading-weight)', fontSize: '32px', lineHeight: 1.15, letterSpacing: '-0.015em', color: 'var(--color-accent-700)', margin: '0 0 40px', ...this.fadeStyle(projectsV, 0) },
+      content: this.fadeStyle(projectsV, 130),
+    };
+
+    const rowStyleGrid = {
+      display: 'grid',
+      gridTemplateColumns: projectsLayout === 'rows' ? '48px minmax(0,1fr) auto' : '1fr',
+      gap: '24px', alignItems: 'start',
+      padding: '28px 0', borderTop: '2px solid var(--color-divider)',
+    };
+    const badgeRowStyleGrid = { ...rowStyleGrid, position: 'relative' };
+
+    const rawProjects = [
+      { title: 'Twyst', desc: 'NFC tap-to-order infrastructure for hospitality. Guests tap, order and pay from the table while staff manage fulfilment through one lightweight workflow.', tags: ['Next.js', 'Supabase', 'Stripe Webhooks', 'NFC tech'], link: 'Twyst.dc.html' },
+      { title: 'Palate AI', desc: 'A personal nutrition system that connects planning, shopping, cooking and tracking into one adaptive nutrition loop.', tags: ['React Native', 'OpenAI API', 'Fastify', 'Supabase', 'Tesco Product Scraper / Grocery Data Pipeline'], link: 'Palate.dc.html', badge: 'working on currently' },
+      { title: 'hunter.ai', desc: 'hunter.ai moves online shopping beyond search and comparison toward AI-guided decision making. It understands what users want, evaluates the market, and helps decide whether to buy, wait, or keep watching.', tags: ['Next.js', 'FastAPI', 'Prophet', 'Isolation Forest', 'eBay/Vinted/Skyscanner Scrapers'], link: 'Hunter.dc.html' },
+      { title: 'CyberFileTracker', desc: 'CyberFileTracker is an AI-powered document security system that classifies enterprise documents from their content and context, then uses confidence gates and access controls to determine how they can be protected, routed, and opened.', tags: ['Python', 'scikit-learn', 'TF-IDF', 'Logistic Regression', 'Fernet', 'RBAC', 'JSON Audit Logging'], link: 'CyberFileTracker.dc.html' },
+      { title: 'Joby', desc: 'A simple placement application tool for university students. It keeps one trusted version of your experience, then helps tailor it to each role without making you rebuild your CV from scratch every time.', tags: ['TypeScript', 'PostgreSQL', 'LLM-based information extraction', 'contextual adaptation', 'human-in-the-loop validation'], link: 'Joby.dc.html', badge: 'working on currently' },
+    ];
+    const projects = rawProjects.map((p, i) => ({
+      ...p, num: String(i + 1).padStart(2, '0'), rowStyle: p.badge ? badgeRowStyleGrid : rowStyleGrid,
+    }));
+
+    const socials = [
+      { label: 'GitHub', href: 'https://github.com/adilr46?tab=repositories', icon: { __html: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>' } },
+      { label: 'LinkedIn', href: 'https://www.linkedin.com/in/adil-rasheed-7a7b18162/', icon: { __html: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>' } },
+    ];
+
+    const skills = ['React Native', 'Python', 'JavaScript', 'SQL', 'HTML', 'LLM Systems', 'Applied ML', 'APIs & Event-Driven Systems'];
+
+    return {
+      navStyle, aboutGridStyle, projects, socials, skills, showAboutPhoto,
+      aboutFade, projectsFade,
+      setAboutRef: this.setAboutRef, setProjectsRef: this.setProjectsRef,
+    };
+  }
+}
+
+</script>
+</body>
+</html>
